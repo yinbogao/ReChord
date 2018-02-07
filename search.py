@@ -8,9 +8,6 @@ tree =etree.parse("chopin.xml")
 
 root = tree.getroot()
 
-#print(etree.tostring(root, pretty_print=True))
-
-
 def recursiveElementList(root, i):
     #for n in range(1, i):
      # print("    ", end = "")
@@ -46,8 +43,12 @@ def noteSearch(inputList, root):
     #inputList = search criteria, root = MEI file wh/ is being searched
     #returns index where sequence was found, -1 if not found
 
-    #noteList = ['a', 'b', 'c', 'd', 'e', 'f']
-    noteList = getNotesList(root, 0, [])
+    noteList = ['a', 'b', 'c', 'd', 'e', 'f']
+
+    
+    #noteList = getNotesList(root, 0, [])
+
+
     for i in range(0, len(noteList)-len(inputList)+1):
         j=0
         while(noteList[i+j]==inputList[j]):
@@ -55,10 +56,10 @@ def noteSearch(inputList, root):
                 return i
             j+=1
     return -1
-criteria=['e', 'f']
-print(getNotesList(root, 0, [])[noteSearch(['e','f'], root)])
+criteria=['f']
+print(noteSearch(criteria, root))
 
 
-#for i in getNotesList(root, 0, []):
- #   print(i, end=", ")
+for i in getNotesList(root, 0, []):
+    print(i, end=", ")
 
