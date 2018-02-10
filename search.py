@@ -9,8 +9,11 @@ tree = etree.parse("chopin.xml")
 root = tree.getroot()
 
 def prepareTree(root):
+    # remove html text from tags
+
     for element in root.iter():
         element.tag = element.tag.replace("{http://www.music-encoding.org/ns/mei}", "")
+
     return
 
 
@@ -44,25 +47,58 @@ def noteSearch(inputList, root):
     #inputList = search criteria, root = MEI file wh/ is being searched
     #returns index where sequence was found, -1 if not found
 
-    noteList = ['a', 'b', 'c', 'd', 'e', 'f']
+    # todo reformat lists (as input can be "abfdef")
 
-    #noteList = getNotesList(root, 0, [])
+    notesList = []
+    xmlIDs = []
+    i = 0
+    ID = ""
 
-    for i in range(0, len(noteList) - len(inputList) + 1):
-        j = 0
-        while (noteList[i + j] == inputList[j]):
-            if (j == len(inputList) - 1):
-                return i
-            j += 1
-    return -1
+    # todo if there are multiple matches
+    # todo xml:id how to navegate through/ return the document?
+    for element in root.iter("note"):
+        try:
+            if inputList[i] == element.get("pname"):
+                notesList.append(element.get("pname"))
+                print("cur: ", notesList)
+                if i == 0:
+                    print("find xml:id")
+                    ID = element.get("xml:id")
+                    # print(xmlID)
+                i +=1
+
+            else:
+                notesList.clear()
+                i = 0
+        except IndexError:
+            print("hit the bottom, congrates you match!")
+            xmlIDs.append(ID)
+            i = 0
+            continue
+
+    print("loop finish")
+
+    if set(notesList) | set(inputList) == set(notesList) & set(inputList):
+
+        return xmlIDs
+    else:
+        return "no exact match has been found"
+
 
 
 
 def main():
     # criteria = ['f']
     # print(noteSearch(criteria, root))
+
     prepareTree(root)
-    print(getNotesList(root))
+    # print(getNotesList(root))
+
+    # testing for noteSearch:
+    ls = ["a", "f", "b"]
+    ls2 = ["c", "c", "c", "d"]
+    print(noteSearch(ls2, root))
+    # print("a")
 
 
 if __name__ == "__main__":
