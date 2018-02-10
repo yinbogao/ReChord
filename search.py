@@ -8,6 +8,11 @@ import tkinter
 tree = etree.parse("chopin.xml")
 root = tree.getroot()
 
+def prepareTree(root):
+    for element in root.iter():
+        element.tag = element.tag.replace("{http://www.music-encoding.org/ns/mei}", "")
+    return
+
 
 def recursiveElementList(root, i):
     #for n in range(1, i):
@@ -29,17 +34,10 @@ def recursiveElementList(root, i):
             recursiveElementList(child, i + 1)
 
 
-def getNotesList(root, i, list):
+def getNotesList(root):
     # returns list of all notes in order
 
-    # check if element is a note, then if it is, add it's letter to the list.
-    if (root.tag.replace("{http://www.music-encoding.org/ns/mei}",
-                         "") == 'note'):
-        list.append(root.attrib['pname'])
-    if len(root):
-        for child in root:
-            getNotesList(child, i + 1, list)
-    return list
+    return [element.get("pname") for element in root.iter("note")]
 
 
 def noteSearch(inputList, root):
@@ -59,8 +57,13 @@ def noteSearch(inputList, root):
     return -1
 
 
-criteria = ['f']
-print(noteSearch(criteria, root))
 
-for i in getNotesList(root, 0, []):
-    print(i, end=", ")
+def main():
+    # criteria = ['f']
+    # print(noteSearch(criteria, root))
+    prepareTree(root)
+    print(getNotesList(root))
+
+
+if __name__ == "__main__":
+    main()
