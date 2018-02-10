@@ -7,11 +7,7 @@ import tkinter
 
 tree = etree.parse("chopin.xml")
 root = tree.getroot()
-
-def prepareTree(root):
-    for element in root.iter():
-        element.tag = element.tag.replace("{http://www.music-encoding.org/ns/mei}", "")
-    return
+namespace = "{http://www.music-encoding.org/ns/mei}"
 
 
 def recursiveElementList(root, i):
@@ -34,35 +30,74 @@ def recursiveElementList(root, i):
             recursiveElementList(child, i + 1)
 
 
-def getNotesList(root):
+def getTagList(root, tag):
     # returns list of all notes in order
 
-    return [element.get("pname") for element in root.iter("note")]
+    return [element.get(tag) for element in root.iter("note")]
 
 
 def noteSearch(inputList, root):
     #inputList = search criteria, root = MEI file wh/ is being searched
     #returns index where sequence was found, -1 if not found
 
-    noteList = ['a', 'b', 'c', 'd', 'e', 'f']
+    # todo reformat lists (as input can be "abfdef")
 
-    #noteList = getNotesList(root, 0, [])
+    notesList = []
+    idList = []
+    i = 0
+    xmlid = 23
 
-    for i in range(0, len(noteList) - len(inputList) + 1):
-        j = 0
-        while (noteList[i + j] == inputList[j]):
-            if (j == len(inputList) - 1):
-                return i
-            j += 1
-    return -1
+    # todo if there are multiple matches
+    # todo xml:id how to navegate through/ return the document?
+
+    for element in root.iter(namespace + "note"):
+        if i + 1 <= len(inputList):
+            if inputList[i] == element.get("pname"):
+                notesList.append(element.get("pname"))
+                print(element.get("oct"))
+                print("cur: ", notesList)
+                if i == 0:
+                    # print("find xml:id")
+                    print(element.get("oct"))
+                    print(element.get("xml"))
+                    xmlid = element.get("xml:id")
+                    print(xmlid)
+                i +=1
+
+            else:
+                notesList.clear()
+                i = 0
+
+        else:
+            print("hit the end of the input list, congrates you match!")
+            idList.append(xmlid)
+            notesList.clear()
+            i = 0
+
+    print("loop finish")
+
+    if idList != []:
+        return idList
+    else:
+        return "no exact match has been found"
+
 
 
 
 def main():
     # criteria = ['f']
     # print(noteSearch(criteria, root))
+
     prepareTree(root)
-    print(getNotesList(root))
+    # print(getTagList(root, ))
+    # print(getTagList(root, "oct"))
+    # print(getTagList(root, "xml:id"))
+
+    # testing for noteSearch:
+    ls = ["a", "f", "b"]
+    ls2 = ["c", "c", "c", "d"]
+    print(noteSearch(ls2, root))
+    # print("a")
 
 
 if __name__ == "__main__":
