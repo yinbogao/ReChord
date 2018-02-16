@@ -1,9 +1,10 @@
 from lxml import etree
 from tkinter.filedialog import askopenfilename
 import tkinter
+import posixpath
 
-#tkinter.Tk().withdraw()
-#tree = ET.parse(askopenfilename())
+tkinter.Tk().withdraw()
+tree = etree.parse(askopenfilename())
 
 tree = etree.parse("chopin.xml")
 root = tree.getroot()
@@ -39,6 +40,34 @@ def getNotesList(root):
 
     return [element.get("pname") for element in root.iter("note")]
 
+def getNotesWithAccidentals(root):
+    # spits out notes with accidentals tagged onto end... can be manipulated easily to do what we want
+    notes = [element.get("pname") for element in root.iter("note")]
+    accidentals = [element.get("accid.ges") for element in root.iter("note")]
+    notesWAccid = []
+    #print(type(notes[1]))
+    i=0
+    for i in range(0, len(notes)):
+        if type(accidentals[i]) is str:
+            noteacc = notes[i] + accidentals[i]
+        else:
+            noteacc = notes[i]
+        notesWAccid.append(noteacc)
+
+    return notesWAccid
+
+def notesInMeasure(root):
+    # method goes through every measure and counts the number of notes in said measure,
+    # spits out array with 0 being the first measure in sheet music
+    measures = [element.get("n") for element in root.iter("measure")]
+    noteno = []
+    i = 0
+    for i in range(0, len(measures)-1):
+        meas = [element.get("pname") for element in root[1][0][0][0][1][i].iter("note")]
+        noteno.append(len(meas))
+        i += 1
+
+    return noteno
 
 def noteSearch(inputList, root):
     #inputList = search criteria, root = MEI file wh/ is being searched
@@ -63,7 +92,8 @@ def main():
     # print(noteSearch(criteria, root))
     prepareTree(root)
     print(getNotesList(root))
-
+    print(getNotesWithAccidentals(root))
+    print(notesInMeasure(root))
 
 if __name__ == "__main__":
     main()
