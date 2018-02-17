@@ -7,13 +7,28 @@ note_namespace = 'http://www.w3.org/XML/1998/namespace'
 
 
 def trial():
-    r = tree.xpath('//mei:note[@xml:id]',
+    r = tree.xpath('//mei:measure[@xml:id]',
                    namespaces = {'mei': 'http://www.music-encoding.org/ns/mei'})
-    print(r[0].attrib)
+
     tree.getpath(r[0])
     r[0].getparent()
     return r
 
+
+def get_elements(elementType, tree):
+    """return list of all elements of type elementType from tree"""
+
+    searchParam = "//mei:"+elementType
+    r=tree.xpath(searchParam, namespaces = {'mei': 'http://www.music-encoding.org/ns/mei'})
+    return r
+
+def find_articulation(articName, tree):
+    allArticList = get_elements('artic', tree)
+    articList = []
+    for articulation in allArticList:
+        if(articulation.attrib['artic'] == articName):
+            articList.append(articulation)
+    return articList
 
 def get_notes(tree):
     """return all the notes from the tree """
@@ -59,7 +74,8 @@ def notes_on_beam(tree):
         beam_notes_list.append(ls)
 
     return beam_notes_list
+print(get_elements('artic', tree)) #prints all articulations
+print(find_articulation('stacc', tree)) #prints just 'stacc' articulations
 
-# print(trial())
-print(get_notes(tree))
-print(notes_on_beam(tree))
+#print(get_notes(tree))
+#print(notes_on_beam(tree))
