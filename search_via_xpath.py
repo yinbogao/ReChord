@@ -15,6 +15,12 @@ def trial():
     return r
 
 
+def get_measure(element):
+    while element.tag != '{http://www.music-encoding.org/ns/mei}measure':
+        element = element.getparent()
+    return element.attrib['n']
+
+
 def get_elements(elementType, tree):
     """return list of all elements of type elementType from tree"""
 
@@ -74,8 +80,14 @@ def notes_on_beam(tree):
         beam_notes_list.append(ls)
 
     return beam_notes_list
-print(get_elements('artic', tree)) #prints all articulations
-print(find_articulation('stacc', tree)) #prints just 'stacc' articulations
+
+
+for x in find_articulation('stacc', tree):
+    print(get_measure(x))
+
+
+#print(get_elements('artic', tree)) #prints all articulations
+#print(find_articulation('stacc', tree)) #prints just 'stacc' articulations
 
 #print(get_notes(tree))
 #print(notes_on_beam(tree))
