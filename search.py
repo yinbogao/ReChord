@@ -85,7 +85,7 @@ def notes_on_beam(tree):
 
 def main():
     # prepare the tree for the file
-    tree, root = prepare_tree('chopin.xml')
+    tree, root = prepare_tree('database/Chopin.xml')
 
     # get a list of all notes from the file
     attrib_ls = get_attrib_from_element(tree, 'note', 'pname')
