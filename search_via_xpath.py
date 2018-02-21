@@ -19,7 +19,7 @@ def search(inputroot, dataTree):
     """inputList is a list of elements to be searched for
        dataTree is an etree to be searched"""
 
-    counter = 1
+    counter = 0
     firstEltMatch = None
     inputList = []
     for element in inputroot.iter():
@@ -30,6 +30,7 @@ def search(inputroot, dataTree):
         #elTag = str(element.tag)
         if(counter==len(inputList)-1):
             measureMatchList.append(get_measure(element))
+            #todo: currently returns measure of last element in search param, should be first
             counter = 1
 
         if element.tag==(inputList[counter].tag):
@@ -37,27 +38,28 @@ def search(inputroot, dataTree):
             if element.tag == namespace+'note' :
                 if(element.attrib['pname']==inputList[counter].attrib['pname']):
 
-                    counter += 1
                     if counter==1: firstEltMatch=get_measure(element)
+                    counter += 1
 
             elif element.tag == namespace+'rest' :
 
-                counter += 1
                 if counter == 1:
                     firstEltMatch = get_measure(element)
+                counter += 1
 
             elif element.tag == namespace+'artic':
                 if(element.attrib['artic']==inputList.attrib['artic']):
-                    counter += 1
+
                     if counter == 1:
                         firstEltMatch=get_measure(element)
+                    counter += 1
 
             else:
+                if counter ==0: firstEltMatch = get_measure(element)
                 counter += 1
-                firstEltMatch=None
         else:
             counter = 1
-            firstEltMatch = None
+            firstEltMatch = -1
     return measureMatchList
 
 
