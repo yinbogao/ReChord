@@ -2,20 +2,68 @@ from lxml import etree
 
 tree = etree.parse("chopin.xml")
 root = tree.getroot()
-namespace = 'http://www.music-encoding.org/ns/mei'
+namespace = '{http://www.music-encoding.org/ns/mei}'
 note_namespace = 'http://www.w3.org/XML/1998/namespace'
-
-
+inputXML = etree.parse('testinput.xml')
+inputRoot = inputXML.getroot()
 def trial():
     r = tree.xpath('//mei:measure[@xml:id]',
-                   namespaces = {'mei': 'http://www.music-encoding.org/ns/mei'})
+                   namespaces = {'mei': namespace})
 
     tree.getpath(r[0])
     r[0].getparent()
     return r
 
 
+def search(inputroot, dataTree):
+    """inputList is a list of elements to be searched for
+       dataTree is an etree to be searched"""
+
+    counter = 1
+    firstEltMatch = None
+    inputList = []
+    for element in inputroot.iter():
+        inputList.append(element)
+        element.tag = "{http://www.music-encoding.org/ns/mei}"+element.tag
+    measureMatchList = []
+    for element in dataTree.getroot().iter():
+        #elTag = str(element.tag)
+        if(counter==len(inputList)-1):
+            measureMatchList.append(get_measure(element))
+            counter = 1
+
+        if element.tag==(inputList[counter].tag):
+
+            if element.tag == namespace+'note' :
+                if(element.attrib['pname']==inputList[counter].attrib['pname']):
+
+                    counter += 1
+                    if counter==1: firstEltMatch=get_measure(element)
+
+            elif element.tag == namespace+'rest' :
+
+                counter += 1
+                if counter == 1:
+                    firstEltMatch = get_measure(element)
+
+            elif element.tag == namespace+'artic':
+                if(element.attrib['artic']==inputList.attrib['artic']):
+                    counter += 1
+                    if counter == 1:
+                        firstEltMatch=get_measure(element)
+
+            else:
+                counter += 1
+                firstEltMatch=None
+        else:
+            counter = 1
+            firstEltMatch = None
+    return measureMatchList
+
+
 def get_measure(element):
+    if element == None :
+        return -1
     while element.tag != '{http://www.music-encoding.org/ns/mei}measure':
         element = element.getparent()
     return element.attrib['n']
@@ -82,12 +130,7 @@ def notes_on_beam(tree):
     return beam_notes_list
 
 
-for x in find_articulation('stacc', tree):
-    print(get_measure(x))
+print(search(inputRoot, tree))
 
-
-#print(get_elements('artic', tree)) #prints all articulations
-#print(find_articulation('stacc', tree)) #prints just 'stacc' articulations
-
-#print(get_notes(tree))
-#print(notes_on_beam(tree))
+#for n in inputRoot.iter():
+#    print(n.tag)
