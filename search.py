@@ -1,5 +1,6 @@
 from lxml import etree
 
+namespace = '{http://www.music-encoding.org/ns/mei}'
 
 # Generic Functions
 
@@ -82,10 +83,63 @@ def notes_on_beam(tree):
 
     return beam_notes_list
 
+def search(input_root, data_tree):
+    """input_root is a root of elements to be searched for
+       data_tree is an etree to be searched"""
+    #todo: fix variable names to stop using camelcase
+    #todo: either fix firstEltMatch or eliminate
+    counter = 0
+    firstEltMatch = None
+    inputList = []  
+    for element in input_root.iter():
+        inputList.append(element)
+        element.tag = "{http://www.music-encoding.org/ns/mei}" + element.tag
+    measure_match_list = []
+    for element in data_tree.getroot().iter():
+        # elTag = str(element.tag)
+        if (counter == len(inputList) - 1):
+            measure_match_list.append(get_measure(element))
+            # todo: currently returns measure of last element in search param, should be first
+            counter = 1
+
+        if element.tag == (inputList[counter].tag):
+
+            if element.tag == namespace + 'note':
+                if (element.attrib['pname'] == inputList[counter].attrib['pname']):
+
+                    if counter == 1: firstEltMatch = get_measure(element)
+                    counter += 1
+
+            elif element.tag == namespace + 'rest':
+
+                if counter == 1:
+                    firstEltMatch = get_measure(element)
+                counter += 1
+
+            elif element.tag == namespace + 'artic':
+                if (element.attrib['artic'] == inputList.attrib['artic']):
+
+                    if counter == 1:
+                        firstEltMatch = get_measure(element)
+                    counter += 1
+
+            else:
+                if counter == 0: firstEltMatch = get_measure(element)
+                counter += 1
+        else:
+            counter = 1
+            firstEltMatch = -1
+    return measure_match_list
+
 
 def main():
     # prepare the tree for the file
     tree, root = prepare_tree('database/Chopin.xml')
+    inputXML = etree.parse('testinput.xml')
+    input_root = inputXML.getroot()
+
+    #print a list of matches to testinput.XML from Chopin.XML
+    print(search(input_root, tree))
 
     # get a list of all notes from the file
     attrib_ls = get_attrib_from_element(tree, 'note', 'pname')
