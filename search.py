@@ -11,6 +11,13 @@ def prepare_tree(xml_file):
     return tree, root
 
 
+def tree_to_list(root):
+    ret_list=[]
+    for element in root.iter():
+        ret_list.append(element)
+    return ret_list
+
+
 def get_measure(element):
     while element.tag != '{http://www.music-encoding.org/ns/mei}measure':
         element = element.getparent()
@@ -83,14 +90,17 @@ def notes_on_beam(tree):
 
     return beam_notes_list
 
+
 def search(input_root, data_tree):
     """input_root is a root of elements to be searched for
        data_tree is an etree to be searched"""
     #todo: fix variable names to stop using camelcase
     #todo: either fix firstEltMatch or eliminate
+    #todo: work on how staffs are split
+    #todo: issues with things like measures and dividers between notes
     counter = 0
     firstEltMatch = None
-    inputList = []  
+    inputList = []
     for element in input_root.iter():
         inputList.append(element)
         element.tag = "{http://www.music-encoding.org/ns/mei}" + element.tag
@@ -105,7 +115,7 @@ def search(input_root, data_tree):
         if element.tag == (inputList[counter].tag):
 
             if element.tag == namespace + 'note':
-                if (element.attrib['pname'] == inputList[counter].attrib['pname']):
+                if element.attrib['pname'] == inputList[counter].attrib['pname']:
 
                     if counter == 1: firstEltMatch = get_measure(element)
                     counter += 1
@@ -147,20 +157,20 @@ def main():
     # get a list of artic elements
     element_ls = get_elements_has_attrib(tree, 'artic', 'artic')
 
-    print("-" * 10, "a list of artic elements' attributions dictionary", "-" * 10)
-    for element in element_ls:
-        print(element.attrib)
+    #print("-" * 10, "a list of artic elements' attributions dictionary", "-" * 10)
+    #for element in element_ls:
+        #print(element.attrib)
 
     # get a list of artic element that has a staccato articulation
     element_artic_list = find_artic(tree, 'stacc')
-    print("-" * 10, "artic elements that has a staccato articulation", "-" * 10)
+    #print("-" * 10, "artic elements that has a staccato articulation", "-" * 10)
     for element in element_artic_list:
-        print(element)
-        print("is in measure:", get_measure(element))
+        #print(get_measure(element))
+        print("stacc is in measure:", get_measure(element))
 
     # print tests result
-    print("-" * 10, "all notes from the file", "-" * 10)
-    print(attrib_ls)
+    #print("-" * 10, "all notes from the file", "-" * 10)
+    #print(attrib_ls)
 
 
 
