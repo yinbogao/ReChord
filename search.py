@@ -91,6 +91,12 @@ def notes_on_beam(tree):
     return beam_notes_list
 
 
+def root_to_list(root):
+    arr = []
+    for element in root.iter():
+        arr.append(element)
+    return arr
+
 def search(input_root, data_tree):
     """input_root is a root of elements to be searched for
        data_tree is an etree to be searched"""
@@ -98,51 +104,39 @@ def search(input_root, data_tree):
     #todo: either fix firstEltMatch or eliminate
     #todo: work on how staffs are split
     #todo: issues with things like measures and dividers between notes
+
     counter = 0
-    firstEltMatch = None
-    inputList = []
-    for element in input_root.iter():
-        inputList.append(element)
-        element.tag = "{http://www.music-encoding.org/ns/mei}" + element.tag
+    input_list = root_to_list(input_root)
+    data_list = root_to_list(data_tree.getroot())
     measure_match_list = []
-    for element in data_tree.getroot().iter():
-        # elTag = str(element.tag)
-        if (counter == len(inputList) - 1):
-            measure_match_list.append(get_measure(element))
-            # todo: currently returns measure of last element in search param, should be first
-            counter = 1
 
-        if element.tag == (inputList[counter].tag):
+    for i in range(len(data_list)-len(input_list)):
+        for j in range(1, len(input_list)):
+            match = False
+            if(data_list[i+j].tag==input_list[j].tag):
+                print("tagMatch")
+                tag = data_list[i+j].tag
+                if tag==namespace+"note":
+                    if data_list[i+j].attrib["pname"]==input_list[j].attrib["pname"] and data_list[i+j].attrib["dur"]==input_list[j].attrib["dur"]:
+                        match = True
+                elif tag == namespace+"rest":
+                    if data_list[i+j].attrib["dur"]==input_list[j].attrib["dur"]:
+                        match = True
+                elif tag == namespace+"artic":
+                    if data_list[i+j].attrib["artic"]==input_list[j].attrib["artic"]:
+                        match = True
+                else:
+                    match = True
+                if j == len(input_list)-1:
+                    measure_match_list.append(get_measure(data_list[i]))
 
-            if element.tag == namespace + 'note':
-                if element.attrib['pname'] == inputList[counter].attrib['pname']:
+            if(not match):
+                break
 
-                    if counter == 1: firstEltMatch = get_measure(element)
-                    counter += 1
-
-            elif element.tag == namespace + 'rest':
-
-                if counter == 1:
-                    firstEltMatch = get_measure(element)
-                counter += 1
-
-            elif element.tag == namespace + 'artic':
-                if (element.attrib['artic'] == inputList.attrib['artic']):
-
-                    if counter == 1:
-                        firstEltMatch = get_measure(element)
-                    counter += 1
-
-            else:
-                if counter == 0: firstEltMatch = get_measure(element)
-                counter += 1
-        else:
-            counter = 1
-            firstEltMatch = -1
     return measure_match_list
 
 
-def main():
+def tests():
     # prepare the tree for the file
     tree, root = prepare_tree('database/Chopin.xml')
     inputXML = etree.parse('testinput.xml')
@@ -167,11 +161,15 @@ def main():
     for element in element_artic_list:
         #print(get_measure(element))
         print("stacc is in measure:", get_measure(element))
-
+    for element in input_root.iter():
+        print(element.tag)
     # print tests result
     #print("-" * 10, "all notes from the file", "-" * 10)
     #print(attrib_ls)
 
+
+def main():
+    tests()
 
 
 if __name__ == "__main__":
