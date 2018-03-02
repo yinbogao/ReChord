@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-model href="http://www.music-encoding.org/schema/2.1.1/mei-all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <?xml-model href="http://www.music-encoding.org/schema/2.1.1/mei-all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<root>
+<mei xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.music-encoding.org/ns/mei" meiversion="2013">
     <beam>
                                         <note xml:id="d414233e13487" pname="f" oct="2" dur="16" stem.dir="down"/>
                                         <note xml:id="d414233e13505" pname="c" oct="3" dur="16" stem.dir="down"/>
@@ -18,4 +18,4 @@
                                         <note xml:id="d414233e13671" pname="g" oct="3" dur="16" stem.dir="down"/>
                                         <note xml:id="d414233e13690" pname="c" oct="3" dur="16" stem.dir="down"/>
                                     </beam>
-</root>
+</mei>
