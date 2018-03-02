@@ -136,41 +136,57 @@ def get_mei_from_database(path):
     return all_mei_files
 
 
+def check_element_match(element1, element2):
+    """return boolean of whether element1 and element2 match by our definitions"""
+    # todo: implement ability to decide which attributes to check on a search-by-search basis
+
+    if element1.tag == element2.tag:
+        tag = element1.tag
+
+        if tag == namespace + "note":
+            # check pname and dur of note
+            if element1.attrib["pname"] == element2.attrib["pname"] and element1.attrib["dur"] == element2.attrib["dur"]:
+                return True
+
+        elif tag == namespace + "rest":
+            # check dur of rest
+            if element1.attrib["dur"] == element2.attrib["dur"]:
+                return True
+
+        elif tag == namespace + "artic":
+            # check name of articulation
+            if element1.attrib["artic"] == element2.attrib["artic"]:
+                return True
+
+        else:
+            # element isn't a note, rest, or articulation--don't need to check attributes
+            return True
+    return False
+
+
 def search(input_root, data_tree):
     """input_root is a root of elements to be searched for
        data_tree is an etree to be searched"""
-    # todo: fix variable names to stop using camelcase
-    # todo: either fix firstEltMatch or eliminate
     # todo: work on how staffs are split
     # todo: issues with things like measures and dividers between notes
 
-    counter = 0
     input_list = root_to_list(input_root)
     data_list = root_to_list(data_tree.getroot())
     measure_match_list = []
 
+    # iterate over data MEI file
     for i in range(len(data_list)-len(input_list)):
+
+        # iterate over input and check if each element matches
         for j in range(1, len(input_list)):
-            match = False
-            if data_list[i+j].tag == input_list[j].tag:
-                print("tagMatch")
-                tag = data_list[i+j].tag
-                if tag == namespace+"note":
-                    if data_list[i+j].attrib["pname"] == input_list[j].attrib["pname"] and \
-                            data_list[i+j].attrib["dur"] == input_list[j].attrib["dur"]:
-                        match = True
-                elif tag == namespace+"rest":
-                    if data_list[i+j].attrib["dur"] == input_list[j].attrib["dur"]:
-                        match = True
-                elif tag == namespace+"artic":
-                    if data_list[i+j].attrib["artic"]==input_list[j].attrib["artic"]:
-                        match = True
-                else:
-                    match = True
-                if j == len(input_list)-1:
+
+            if check_element_match(data_list[i+j], input_list[j]):
+                # if last element in input_list, add measure to list of matches
+                if j == len(input_list) - 1:
                     measure_match_list.append(get_measure(data_list[i]))
 
-            if not match:
+            else:
+                # elements don't match->stop input iteration and move to next data element
                 break
 
     return measure_match_list
