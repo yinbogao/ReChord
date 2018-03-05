@@ -22,6 +22,7 @@ def positive_test_check_element_match():
 
 def main():
     positive_test_find_expressive_term()
+    positive_test_check_element_match()
 
 
 if __name__ == '__main__':
