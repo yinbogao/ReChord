@@ -9,6 +9,7 @@ def positive_test_find_expressive_term():
 
 
 def positive_test_check_element_match():
+    """positive test for seeing if all elements in a file match themselves"""
     _,root = prepare_tree('database/Chopin.xml')
     all_equal = True
     unequalelt = None
