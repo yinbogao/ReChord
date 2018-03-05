@@ -144,7 +144,12 @@ def check_element_match(element1, element2):
 
         if tag == namespace + "note":
             # check pname and dur of note
-            if element1.attrib["pname"] == element2.attrib["pname"] and element1.attrib["dur"] == element2.attrib["dur"]:
+
+            if element1.attrib["pname"] == element2.attrib["pname"] :
+                if 'dur' in element1.attrib and 'dur' in element2.attrib:
+                    if element1.attrib["dur"] == element2.attrib["dur"]:
+                        return True
+                    return False
                 return True
 
         elif tag == namespace + "rest":

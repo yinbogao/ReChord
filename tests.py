@@ -69,12 +69,7 @@ def positive_test_check_element_match():
 
 def main():
     positive_test_find_expressive_term()
-    positive_test_find_artic()
-    positive_test_search()
-    positive_test_get_attrib_from_element()
-    positive_test_get_mei_from_database()
-    positive_test_get_title()
-    positive_test_get_creator()
+    positive_test_check_element_match()
 
 
 if __name__ == '__main__':
