@@ -73,8 +73,7 @@ def get_creator(tree):
 def find_expressive_term(tree, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term"""
     all_et_list = get_elements(tree, 'dir')
-    element_et_list = [element for element in all_et_list if element.text == expressive_term
-                       and element.getparent().get('xml:id', "oops") != "oops"]
+    element_et_list = [element for element in all_et_list if element.text == expressive_term]
     return element_et_list
 
 
