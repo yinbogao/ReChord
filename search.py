@@ -6,14 +6,22 @@ namespace = '{http://www.music-encoding.org/ns/mei}'
 # Generic Functions
 
 
-def prepare_tree(xml_file):
-    """create etree and root from the given xml file"""
-    tree = etree.parse(xml_file)
+def prepare_tree(xml_file_path):
+    """create etree and root from the given xml file
+    Arguments: xml_file_path [string]: string of absolute or relative file URL
+    Return: tree [etree]: etree of XML file element objects
+            root [element] root element of tree
+    """
+    tree = etree.parse(xml_file_path)
     root = tree.getroot()
     return tree, root
 
 
-def tree_to_list(root):
+def root_to_list(root):
+    """takes in etree root node, parses it to a depth-first ordered list
+    Arguments: root
+    Returns: List of element objects in depth-first order
+    """
     ret_list = []
     for element in root.iter():
         ret_list.append(element)
@@ -21,13 +29,21 @@ def tree_to_list(root):
 
 
 def get_measure(element):
+    """gets measure of an element
+    Arguments: element [Element]: element you want to find the measure of
+    Return: Measure Number [int]: measure number found in measure's attribute
+    """
     while element.tag != '{http://www.music-encoding.org/ns/mei}measure':
         element = element.getparent()
     return element.attrib['n']
 
 
 def get_elements(tree, tag):
-    """return list of all elements of the tag from tree"""
+    """return list of all elements of the tag from tree
+    Arguments: tree [etree]: tree to search
+               tag [string]: tag to search (without namespace)
+    Return: List of elements of type tag
+    """
     search_term = "//mei:" + tag
     r = tree.xpath(search_term,
                    namespaces={'mei': 'http://www.music-encoding.org/ns/mei'})
@@ -35,14 +51,24 @@ def get_elements(tree, tag):
 
 
 def get_elements_has_attrib(tree, tag, att_name):
-    """return a list of element that is of the tag and contain the attrib"""
+    """return a list of element that is of the tag and contain the attrib
+    Arguments: tree [etree]: tree to search
+               tag [string]: element type to filter by (without namespace)
+               att_name [string]: attribute you want to filter by
+    Return: list of elements of type tag with attribute att_name
+    """
     elements_list = get_elements(tree, tag)
     filtered_element_list = [element for element in elements_list if element.attrib[att_name]]
     return filtered_element_list
 
 
 def get_attrib_from_element(tree, tag, att_name):
-    """return a list of element that is of the tag and contain the attrib"""
+    """return a list of element that is of the tag and contain the attrib
+    Argument: tree [etree]: tree to search
+              tag [string]: element tag to search
+              att_name [string]: attribute type of element to find
+    Return: attrib_list [List<string>]: List of attributes of type att_type on elements of type tag
+    """
     elements_list = get_elements(tree, tag)
     attrib_list = [element.attrib[att_name] for element in elements_list if element.attrib[att_name]]
     return attrib_list
@@ -52,7 +78,10 @@ def get_attrib_from_element(tree, tag, att_name):
 
 
 def get_title(tree):
-    """"return a list of each line of the title of the piece"""
+    """"return a list of each line of the title of the piece
+    Arguments: tree [etree]: tree of file to search
+    Return: title_list [List<element>]: list of title elements
+    """
     title_stmt = get_elements(tree, 'titleStmt')
     first = title_stmt[0]
     arr = first.getchildren()
@@ -62,7 +91,10 @@ def get_title(tree):
 
 
 def get_creator(tree):
-    """return a list of all composers (creators) in the piece"""
+    """return a list of all composers (creators) in the piece
+    Arguments: tree [etree]: tree of mei file
+    Return: creators_list [List<element>]: List of elements marking the creator(s) of a piece
+    """
     resp_stmt = get_elements(tree, 'respStmt')
     first = resp_stmt[0]
     arr = first.getchildren()
@@ -70,22 +102,33 @@ def get_creator(tree):
     return creators_list
 
 
-def find_expressive_term(root, expressive_term):
-    """return a list of elements that has expressive term that is of expressive_term"""
+def find_expressive_term(tree, expressive_term):
+    """return a list of elements that has expressive term that is of expressive_term
+    Arguments: tree [etree]: tree to be searched
+               expressive_term [string]: expressive term to be found
+    Return: all_et_list [List<element>]: list of elements with given expressive term
+    """
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     et_test = music.iter("{http://www.music-encoding.org/ns/mei}dir")
     return [element for element in et_test if element.text == expressive_term]
 
 
-def find_artic(root, artic_name):
-    """return a list of elements that has articulations that is of artic_name"""
+def find_artic(tree, artic_name):
+    """parse a tree to a list of elements that has articulations that is of artic_name
+    Arguments: tree [etree]: tree to be search
+               artic_name [string]: articulation to be searched
+    Return: element_artic_list [List<element>]: list of elements with given articulation
+    """
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
     return [element for element in all_artic_list if element.attrib['artic'] == artic_name]
 
 
 def notes_on_beam(tree):
-    """return a list of nested list where each nested list is the notes on a beam"""
+    """return a list of nested list where each nested list is the notes on a beam for all beams in tree
+    Arguments: tree [etree]: tree to be searched
+    Return: beam_notes_list: [List<Element tag='beam'>] nested list of beam elements
+    """
 
     # get a list of all the beam elements
     r = get_elements(tree, 'beam')
@@ -120,14 +163,11 @@ def notes_on_beam(tree):
     return beam_notes_list
 
 
-def root_to_list(root):
-    arr = []
-    for element in root.iter():
-        arr.append(element)
-    return arr
-
-
 def get_mei_from_database(path):
+    """gets a list of MEI files from a given folder path
+    Arguments: path [string]: absolute or relative path to folder
+    Returns: all_mei_files: List<file>: list of mei files in path
+    """
     all_mei_files = []
     for file in os.listdir(path):
         if file.endswith('.mei'):
@@ -136,7 +176,12 @@ def get_mei_from_database(path):
 
 
 def check_element_match(element1, element2):
-    """return boolean of whether element1 and element2 match by our definitions"""
+    """checks whether element1 and element2 match by our definitions
+
+    Arguments: element1 and element2 are both lxml Element type
+    Returns: ([boolean]) true if they match all given parameters for tag type, false else
+
+    """
     # todo: implement ability to decide which attributes to check on a search-by-search basis
 
     if element1.tag == element2.tag:
@@ -169,8 +214,11 @@ def check_element_match(element1, element2):
 
 
 def search(input_root, data_tree):
-    """input_root is a root of elements to be searched for
-       data_tree is an etree to be searched"""
+    """Searches input_root for pattern in data_tree
+    Arguments: input_root is a root of elements to be searched for
+               data_tree is an etree to be searched
+    Return: measure_match_list [List<int>]: list of measures where pattern appears (with repeats)
+    """
     # todo: work on how staffs are split
     # todo: issues with things like measures and dividers between notes
 
