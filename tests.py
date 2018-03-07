@@ -1,4 +1,4 @@
-from search import prepare_tree, find_expressive_term, get_measure, check_element_match, tree_to_list
+from search import prepare_tree, find_expressive_term, check_element_match, tree_to_list
 
 
 def positive_test_find_expressive_term():
