@@ -60,7 +60,7 @@ def positive_test_check_element_match():
     _,root = prepare_tree('database/Chopin.xml')
     all_equal = True
     unequalelt = None
-    for element in tree_to_list(root):
+    for element in root_to_list(root):
         if not check_element_match(element, element) :
             all_equal = False
             unequalelt = element
