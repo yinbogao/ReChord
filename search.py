@@ -74,16 +74,14 @@ def find_expressive_term(root, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term"""
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     et_test = music.iter("{http://www.music-encoding.org/ns/mei}dir")
-    element_et_list = [element for element in et_test if element.text == expressive_term]
-    return element_et_list
+    return [element for element in et_test if element.text == expressive_term]
 
 
 def find_artic(root, artic_name):
     """return a list of elements that has articulations that is of artic_name"""
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
-    element_artic_list = [element for element in all_artic_list if element.attrib['artic'] == artic_name]
-    return element_artic_list
+    return [element for element in all_artic_list if element.attrib['artic'] == artic_name]
 
 
 def notes_on_beam(tree):
@@ -189,5 +187,4 @@ def search(input_root, data_tree):
             else:
                 # elements don't match->stop input iteration and move to next data element
                 break
-
     return measure_match_list
