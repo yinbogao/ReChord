@@ -35,7 +35,7 @@ def positive_test_get_attrib_from_element():
 
 def positive_test_get_mei_from_database():
     """Positive test for get_mei_from_database"""
-    all_mei_files = get_mei_from_database('database\MEI_Complete_examples')
+    all_mei_files = get_mei_from_database('database/MEI_Complete_examples')
     assert len(all_mei_files) != 0, "get_mei_from_database: no files found"
 
 
