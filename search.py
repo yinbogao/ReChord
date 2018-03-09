@@ -54,7 +54,6 @@ def get_title(tree):
     """"return a list of each line of the title of the piece"""
     title_stmt = get_elements(tree, 'titleStmt')
     first = title_stmt[0]
-    print(first)
     arr = first.getchildren()
     title_list = [element for element in arr if element.tag == "{http://www.music-encoding.org/ns/mei}title"]
     # print(title_list)
@@ -70,16 +69,18 @@ def get_creator(tree):
     return creators_list
 
 
-def find_expressive_term(tree, expressive_term):
+def find_expressive_term(root, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term"""
-    all_et_list = get_elements(tree, 'dir')
-    element_et_list = [element for element in all_et_list if element.text == expressive_term]
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    et_test = music.iter("{http://www.music-encoding.org/ns/mei}dir")
+    element_et_list = [element for element in et_test if element.text == expressive_term]
     return element_et_list
 
 
-def find_artic(tree, artic_name):
+def find_artic(root, artic_name):
     """return a list of elements that has articulations that is of artic_name"""
-    all_artic_list = get_elements(tree, 'artic')
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
     element_artic_list = [element for element in all_artic_list if element.attrib['artic'] == artic_name]
     return element_artic_list
 
@@ -247,9 +248,9 @@ def tests():
         print(element.text)
 
 
-def main():
-    tests()
-
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     tests()
+#
+#
+# if __name__ == "__main__":
+#     main()
