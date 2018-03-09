@@ -50,11 +50,11 @@ def get_attrib_from_element(tree, tag, att_name):
 
 # Specific Functions
 
+
 def get_title(tree):
     """"return a list of each line of the title of the piece"""
     title_stmt = get_elements(tree, 'titleStmt')
     first = title_stmt[0]
-    print(first)
     arr = first.getchildren()
     title_list = [element for element in arr if element.tag == "{http://www.music-encoding.org/ns/mei}title"]
     # print(title_list)
@@ -70,18 +70,18 @@ def get_creator(tree):
     return creators_list
 
 
-def find_expressive_term(tree, expressive_term):
+def find_expressive_term(root, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term"""
-    all_et_list = get_elements(tree, 'dir')
-    element_et_list = [element for element in all_et_list if element.text == expressive_term]
-    return element_et_list
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    et_test = music.iter("{http://www.music-encoding.org/ns/mei}dir")
+    return [element for element in et_test if element.text == expressive_term]
 
 
-def find_artic(tree, artic_name):
+def find_artic(root, artic_name):
     """return a list of elements that has articulations that is of artic_name"""
-    all_artic_list = get_elements(tree, 'artic')
-    element_artic_list = [element for element in all_artic_list if element.attrib['artic'] == artic_name]
-    return element_artic_list
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
+    return [element for element in all_artic_list if element.attrib['artic'] == artic_name]
 
 
 def notes_on_beam(tree):
@@ -187,69 +187,4 @@ def search(input_root, data_tree):
             else:
                 # elements don't match->stop input iteration and move to next data element
                 break
-
     return measure_match_list
-
-
-def tests():
-    # prepare the tree for the file
-    tree, root = prepare_tree('database/Chopin.xml')
-    inputXML = etree.parse('testinput.xml')
-    input_root = inputXML.getroot()
-
-    # print a list of matches to testinput.XML from Chopin.XML
-    print(search(input_root, tree))
-
-    # get a list of all notes from the file
-    attrib_ls = get_attrib_from_element(tree, 'note', 'pname')
-
-    # get a list of artic elements
-    element_ls = get_elements_has_attrib(tree, 'artic', 'artic')
-
-    # print("-" * 10, "a list of artic elements' attributions dictionary", "-" * 10)
-    # for element in element_ls:
-        # print(element.attrib)
-
-    # get a list of artic element that has a staccato articulation
-    element_artic_list = find_artic(tree, 'stacc')
-    # print("-" * 10, "artic elements that has a staccato articulation", "-" * 10)
-    for element in element_artic_list:
-        # print(get_measure(element))
-        print("stacc is in measure:", get_measure(element))
-    for element in input_root.iter():
-        print(element.tag)
-    # print tests result
-    # print("-" * 10, "all notes from the file", "-" * 10)
-    # print(attrib_ls)
-
-    # prints all expressive terms that match 'legatissimo' in the Chopin work
-    element_et_list = find_expressive_term(tree, 'legatissimo')
-    if len(element_et_list) != 0:
-        for element in element_et_list:
-            print(element.text + " in measure " + get_measure(element))
-    else:
-        print("Expressive term not found")
-
-    # # prints all MEI files in database\MEI_Complete_examples
-    # all_mei_files = get_mei_from_database('database\MEI_Complete_examples')
-    # for element in all_mei_files:
-    #     print(element)
-
-    # finds title
-    title_list = get_title(tree)
-    for element in title_list:
-        print(element.text)
-
-    # finds composer (creator)
-    print("by:")
-    creators_list = get_creator(tree)
-    for element in creators_list:
-        print(element.text)
-
-
-def main():
-    tests()
-
-
-if __name__ == "__main__":
-    main()
