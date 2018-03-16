@@ -1,6 +1,12 @@
 dist: trusty
 language: python
-python:
-  - "3.6"
+python: "3.6"
+matrix:
+  include:
+    - env: SCRIPT=TEST
+    - env: SCRIPT=LINT
+before_install:
+  - pip install pylint
 script:
-  - python tests.py
+  - if [ "$SCRIPT" = "TEST" ]; then python tests.py; fi
+  - if [ "$SCRIPT" = "LINT" ]; then pylint *.py; fi
