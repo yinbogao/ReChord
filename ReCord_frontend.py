@@ -29,7 +29,7 @@ def front_page():
     elif request.method == 'GET'and form.validate():
         result = search(form.data, form.data)
         return render_template('ReChord_result.html', result=result)
-    return render_template('search_test_2.html', form=form)
+    return render_template('ReChord_Boot.html', form=form)
 
 
 if __name__ == "__main__":
