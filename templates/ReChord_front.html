@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+
+<!--bootrap code, uncomment me and below to run-->
+<!--{% extends "bootstrap/base.html" %}-->
+<!--{% import "bootstrap/wtf.html" as wtf %}-->
+
 <html>
 <title>Project Rechord</title>
 <meta charset="UTF-8">
@@ -55,6 +60,15 @@
                 <div class="w3-row-padding" style="margin:0 -2px;">
                     <div class="w3-full">
                         <input class="w3-input w3-border" type="text" placeholder="Your MEI Snippet">
+
+                        <!--todo: here is some bootrap code-->
+                        <!--{% block content %}-->
+                          <!--<form method="POST" action="/">-->
+                              <!--{{ form.csrf_token }}-->
+                            <!--<div>{{ wtf.form_field(form.snippet_box) }}</div>-->
+                            <!--<input type="submit">-->
+                          <!--</form>-->
+                        <!--{% endblock %}-->
                     </div>
                 </div>
                 <p>
@@ -68,6 +82,7 @@
                 <h3>Please enter the tempo marking</h3>
             </div>
         </div>
+   </div>
 </header>
 
 <!-- Page content -->

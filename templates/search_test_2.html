@@ -6,9 +6,13 @@
 </head>
 <body>
     <h1>Submission Test</h1>
-    <form method="POST">
-        <input name="text">
-        <input type="submit">
-    </form>
+    {% block body %}
+      <form method="POST">
+        <div>{{ form.snippet_box.label }}: {{ form.snippet_box }}</div>
+        <div>{{ form.submit }} </div>
+      </form>
+    {% endblock %}
 </body>
+
+
 </html>

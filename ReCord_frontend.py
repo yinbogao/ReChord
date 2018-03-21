@@ -1,26 +1,36 @@
-from flask import Flask, render_template, flash, request
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
+from flask import Flask, render_template, request
+from wtforms import TextAreaField, SubmitField, RadioField, SelectField, validators, ValidationError, Form
+from flask_bootstrap import Bootstrap
 from search import prepare_tree, search, find_artic,get_measure
 from lxml import etree
+
 """Create the Flask app"""
 DEBUG = True
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'DontTellAnyone'
+Bootstrap(app)
 
-"""Turn user submitted MEI code snippet into xml file."""
-def transform_xml(xml_code):
-    xml = xml_code.encode()
-    f = open('upload.xml', 'wb')
-    f.write(xml)
-    f.close()
+class xml_form(Form):
+    snippet_box = TextAreaField('Snippet',[validators.DataRequired()])
+    submit = SubmitField("Submit")
 
-@app.route('/')
-def my_form():
-    return render_template('search_test_2.html')
+class term_form(Form):
+    expressive_terms = RadioField('expressive_terms', choices=["stacatto", "allegro", "allegrissimo", ])
+    submit = SubmitField("Submit")
 
-@app.route('/', methods=['POST'])
-def my_form_post():
-    text = request.form['text']
-    return transform_xml(text)
+# home page
+@app.route('/', methods=['POST', 'GET'])
+def front_page():
+    form = xml_form(request.form)
+    if request.method == 'POST' and form.validate():
+        # this is faking for the result since second input is missing
+        result = search(form.data, form.data)
+        return render_template('ReChord_result.html', result=result)
+    elif request.method == 'GET'and form.validate():
+        result = search(form.data, form.data)
+        return render_template('ReChord_result.html', result=result)
+    return render_template('search_test_2.html', form=form)
+
 
 if __name__ == "__main__":
     app.run()
