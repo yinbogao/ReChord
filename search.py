@@ -19,13 +19,11 @@ def prepare_tree(xml_file_path):
 
 def root_to_list(root):
     """takes in etree root node, parses it to a depth-first ordered list
-    Arguments: root
-    Returns: List of element objects in depth-first order
+    Arguments: root [element] : root element to be converted to list
+    Returns: [list] List of element objects in depth-first order
     """
-    ret_list = []
-    for element in root.iter():
-        ret_list.append(element)
-    return ret_list
+
+    return list(root.iter)
 
 
 def get_measure(element):
@@ -44,10 +42,10 @@ def get_elements(tree, tag):
                tag [string]: tag to search (without namespace)
     Return: List of elements of type tag
     """
-    search_term = "//mei:" + tag
-    r = tree.xpath(search_term,
-                   namespaces={'mei': 'http://www.music-encoding.org/ns/mei'})
-    return r
+    return tree.xpath(
+        "//mei:" + tag,
+        namespaces={'mei': 'http://www.music-encoding.org/ns/mei'}
+    )
 
 
 def get_elements_has_attrib(tree, tag, att_name):
@@ -86,7 +84,6 @@ def get_title(tree):
     first = title_stmt[0]
     arr = first.getchildren()
     title_list = [element for element in arr if element.tag == "{http://www.music-encoding.org/ns/mei}title"]
-    # print(title_list)
     return title_list
 
 
@@ -95,10 +92,8 @@ def get_creator(tree):
     Arguments: tree [etree]: tree of mei file
     Return: creators_list [List<element>]: List of elements marking the creator(s) of a piece
     """
-    resp_stmt = get_elements(tree, 'respStmt')
-    first = resp_stmt[0]
-    arr = first.getchildren()
-    creators_list = [element for element in arr if element.attrib['role'] == "creator"]
+    children = get_elements(tree, 'respStmt')[0].getchildren()
+    creators_list = [element for element in children if element.attrib['role'] == "creator"]
     return creators_list
 
 
@@ -119,7 +114,7 @@ def find_artic(tree, artic_name):
                artic_name [string]: articulation to be searched
     Return: element_artic_list [List<element>]: list of elements with given articulation
     """
-    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    music = tree.getroot.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
     return [element for element in all_artic_list if element.attrib['artic'] == artic_name]
 
@@ -168,11 +163,8 @@ def get_mei_from_database(path):
     Arguments: path [string]: absolute or relative path to folder
     Returns: all_mei_files: List<file>: list of mei files in path
     """
-    all_mei_files = []
-    for file in os.listdir(path):
-        if file.endswith('.mei'):
-            all_mei_files.append(file)
-    return all_mei_files
+
+    return [filename for filename in os.listdir(path) if filename.endswith('.mei')]
 
 
 def check_element_match(element1, element2):

@@ -1,7 +1,7 @@
-from search import prepare_tree, find_expressive_term, find_artic, search, get_attrib_from_element, \
-    get_mei_from_database, get_title, get_creator
+from search import prepare_tree, find_artic, search, get_attrib_from_element, \
+    get_mei_from_database, get_title, get_creator, find_expressive_term, check_element_match, root_to_list
 from lxml import etree
-from search import prepare_tree, find_expressive_term, get_measure, check_element_match, tree_to_list
+
 
 
 def positive_test_find_expressive_term():
