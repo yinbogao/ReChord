@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from wtforms import TextAreaField, SubmitField, RadioField, SelectField, validators, ValidationError, Form
+from WTForms import TextAreaField, SubmitField, RadioField, TextField, validators, ValidationError, Form, StringField
 from flask_bootstrap import Bootstrap
 from search import prepare_tree, search, find_artic,get_measure
 from lxml import etree
@@ -15,7 +15,7 @@ class xml_form(Form):
     submit = SubmitField("Submit")
 
 class term_form(Form):
-    expressive_terms = RadioField('expressive_terms', choices=["stacatto", "allegro", "allegrissimo", ])
+    expressive_terms = StringField('expressive_terms',[validators.DataRequired()])
     submit = SubmitField("Submit")
 
 # home page
@@ -23,13 +23,20 @@ class term_form(Form):
 def front_page():
     form = xml_form(request.form)
     if request.method == 'POST' and form.validate():
-        # this is faking for the result since second input is missing
-        result = search(form.data, form.data)
+        result = search_demo(form.data)
         return render_template('ReChord_result.html', result=result)
     elif request.method == 'GET'and form.validate():
-        result = search(form.data, form.data)
+        result = search_demo(form.data)
         return render_template('ReChord_result.html', result=result)
     return render_template('ReChord_Boot.html', form=form)
+
+
+# this is a temporary function to get around database
+def search_demo(formData):
+    tree, _ = prepare_tree('database/Chopin.xml')
+    inputXML = etree.parse(formData)
+    result = search(inputXML, tree)
+    return result
 
 
 if __name__ == "__main__":
