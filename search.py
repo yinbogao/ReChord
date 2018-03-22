@@ -6,6 +6,15 @@ namespace = '{http://www.music-encoding.org/ns/mei}'
 # Generic Functions
 
 
+def string_to_root(string_in):
+    """
+    Arguments: string_in [string]: input in XML format in a string
+    Return: [element]: root element of parsed etree
+    """
+
+    return etree.fromstring(string_in)
+
+
 def prepare_tree(xml_file_path):
     """create etree and root from the given xml file
     Arguments: xml_file_path [string]: string of absolute or relative file URL
@@ -101,11 +110,11 @@ def find_expressive_term(root, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term
     Arguments: tree [etree]: tree to be searched
                expressive_term [string]: expressive term to be found
-    Return: all_et_list [List<element>]: list of elements with given expressive term
+    Return: all_et_list [List<int>]: list of measure numbers of elements with given expressive term
     """
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     et_test = music.iter("{http://www.music-encoding.org/ns/mei}dir")
-    return [element for element in et_test if element.text == expressive_term]
+    return [get_measure(element) for element in et_test if element.text == expressive_term]
 
 
 def find_artic(tree, artic_name):
@@ -182,7 +191,7 @@ def check_element_match(element1, element2):
         if tag == namespace + "note":
             # check pname and dur of note
 
-            if element1.attrib["pname"] == element2.attrib["pname"] :
+            if element1.attrib["pname"] == element2.attrib["pname"]:
                 if 'dur' in element1.attrib and 'dur' in element2.attrib:
                     if element1.attrib["dur"] == element2.attrib["dur"]:
                         return True
@@ -233,3 +242,4 @@ def search(input_root, data_tree):
                 # elements don't match->stop input iteration and move to next data element
                 break
     return measure_match_list
+
