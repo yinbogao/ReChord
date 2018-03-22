@@ -1,5 +1,5 @@
-from search import prepare_tree, find_expressive_term, find_artic, search, get_attrib_from_element, \
-    get_mei_from_database, get_title, get_creator
+from search import prepare_tree, find_artic, search, get_attrib_from_element, \
+    get_mei_from_database, get_title, get_creator, find_expressive_term, check_element_match, root_to_list
 from lxml import etree
 
 
@@ -53,14 +53,21 @@ def positive_test_get_creator():
     assert len(creator_list) != 0, "get_creator: creator (composer) not found"
 
 
+def positive_test_check_element_match():
+    """positive test for seeing if all elements in a file match themselves"""
+    _, root = prepare_tree('database/Chopin.xml')
+    all_equal = True
+    unequalelt = None
+    for element in root_to_list(root):
+        if not check_element_match(element, element):
+            all_equal = False
+            unequalelt = element
+    assert all_equal, "check_element_match: Not all elements equal to themselves. Check Element with id "+ unequalelt.attrib["xml:id"]
+
+
 def main():
     positive_test_find_expressive_term()
-    positive_test_find_artic()
-    positive_test_search()
-    positive_test_get_attrib_from_element()
-    positive_test_get_mei_from_database()
-    positive_test_get_title()
-    positive_test_get_creator()
+    positive_test_check_element_match()
 
 
 if __name__ == '__main__':
