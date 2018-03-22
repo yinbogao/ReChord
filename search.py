@@ -97,7 +97,7 @@ def get_creator(tree):
     return creators_list
 
 
-def find_expressive_term(tree, expressive_term):
+def find_expressive_term(root, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term
     Arguments: tree [etree]: tree to be searched
                expressive_term [string]: expressive term to be found
@@ -210,7 +210,7 @@ def search(input_root, data_tree):
     Arguments: input_root is a root of elements to be searched for
                data_tree is an etree to be searched
     Return: measure_match_list [List<int>]: list of measures where pattern appears (with repeats)
-    """
+    """ 
     # todo: work on how staffs are split
     # todo: issues with things like measures and dividers between notes
 
