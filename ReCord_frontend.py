@@ -1,44 +1,33 @@
-from flask import Flask, render_template, request
-from WTForms import TextAreaField, SubmitField, RadioField, TextField, validators, ValidationError, Form, StringField
-from flask_bootstrap import Bootstrap
-from search import prepare_tree, search, find_artic,get_measure
+from search import prepare_tree, search, find_artic, get_measure
 from lxml import etree
 
-"""Create the Flask app"""
-DEBUG = True
+from flask import Flask, request, render_template, flash
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'DontTellAnyone'
-Bootstrap(app)
-
-class xml_form(Form):
-    snippet_box = TextAreaField('Snippet',[validators.DataRequired()])
-    submit = SubmitField("Submit")
-
-class term_form(Form):
-    expressive_terms = StringField('expressive_terms',[validators.DataRequired()])
-    submit = SubmitField("Submit")
-
-# home page
-@app.route('/', methods=['POST', 'GET'])
-def front_page():
-    form = xml_form(request.form)
-    if request.method == 'POST' and form.validate():
-        result = search_demo(form.data)
-        return render_template('ReChord_result.html', result=result)
-    elif request.method == 'GET'and form.validate():
-        result = search_demo(form.data)
-        return render_template('ReChord_result.html', result=result)
-    return render_template('ReChord_Boot.html', form=form)
 
 
-# this is a temporary function to get around database
-def search_demo(formData):
-    tree, _ = prepare_tree('database/Chopin.xml')
-    inputXML = etree.parse(formData)
-    result = search(inputXML, tree)
-    return result
+@app.route('/')
+def my_form():
+    return render_template('ReChord_front.html')
 
+
+@app.route('/', methods=['POST'])
+def my_form_post():
+    if request.form['submit'] == 'Search Snippet':
+        snippet = request.form['text']
+
+        # todo: Generate XML, will be replaced
+        xml = snippet.encode()
+        f = open('upload.xml', 'wb')
+        f.write(xml)
+        f.close()
+
+        tree, root = prepare_tree('database/Chopin.xml')
+        inputXML = etree.parse('upload.xml')
+        input_root = inputXML.getroot()
+
+        snippet_measure = search(input_root, tree)
+        return render_template('ReChord_result.html', results=snippet_measure)
 
 if __name__ == "__main__":
     app.run()
-

@@ -49,35 +49,26 @@
     </ul>
 
     <div class="tab-content">
-        <div id="home" class="tab-pane fade in active">
-            <h3>MEI Snippet</h3>
-            <p>Please paste your </p>
-            {% extends "bootstrap/base.html" %}
-            {% import "bootstrap/wtf.html" as wtf %}
-            <!--todo: here is some bootrap code-->
-            {% block content %}
-            <form method="POST" action="/">
-                {{ form.csrf_token }}
-                <div>{{ wtf.form_field(form.snippet_box) }}</div>
-                <input type="submit">
-            </form>
-            {% endblock %}
-        </div>
+        <form method="POST">
+            <input name="text">
+            <input type="submit">
+        </form>
     </div>
-    <div id="menu1" class="tab-pane fade">
-        <h3>Expressive Terms</h3>
-        <!--<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo-->
-            consequat.</p>
-    </div>
-    <div id="menu2" class="tab-pane fade">
-        <h3>Tempo Marking</h3>
-        <!--<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem-->
-            aperiam.</p>
-    </div>
-    <div id="menu3" class="tab-pane fade">
-        <h3>Other</h3>
-        <!--<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>-->
-    </div>
+</div>
+<div id="menu1" class="tab-pane fade">
+    <h3>Expressive Terms</h3>
+    <!--<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo-->
+    consequat.</p>
+</div>
+<div id="menu2" class="tab-pane fade">
+    <h3>Tempo Marking</h3>
+    <!--<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem-->
+    aperiam.</p>
+</div>
+<div id="menu3" class="tab-pane fade">
+    <h3>Other</h3>
+    <!--<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>-->
+</div>
 </div>
 </div>
 </body>
