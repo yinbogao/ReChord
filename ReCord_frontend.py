@@ -25,6 +25,7 @@ def front_page():
     if request.method == 'POST' and form.validate():
         # this is faking for the result since second input is missing
         result = search(form.data, form.data)
+        print(result)
         return render_template('ReChord_result.html', result=result)
     elif request.method == 'GET'and form.validate():
         result = search(form.data, form.data)
