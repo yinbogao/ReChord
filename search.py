@@ -108,7 +108,7 @@ def get_creator(tree):
 
 def find_expressive_term(root, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term
-    Arguments: tree [etree]: tree to be searched
+    Arguments: root [xml Element]: root of the tree to be searched
                expressive_term [string]: expressive term to be found
     Return: all_et_list [List<int>]: list of measure numbers of elements with given expressive term
     """
@@ -117,13 +117,13 @@ def find_expressive_term(root, expressive_term):
     return [get_measure(element) for element in et_test if element.text == expressive_term]
 
 
-def find_artic(tree, artic_name):
+def find_artic(root, artic_name):
     """parse a tree to a list of elements that has articulations that is of artic_name
-    Arguments: tree [etree]: tree to be search
+    Arguments: root [xml Element]: root of the tree to be searched
                artic_name [string]: articulation to be searched
     Return: element_artic_list [List<element>]: list of elements with given articulation
     """
-    music = tree.getroot.find("{http://www.music-encoding.org/ns/mei}music")
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
     return [element for element in all_artic_list if element.attrib['artic'] == artic_name]
 
