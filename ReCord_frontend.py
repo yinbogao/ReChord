@@ -3,16 +3,23 @@ from lxml import etree
 from flask import Flask, request, render_template, flash
 from io import BytesIO
 
+
 app = Flask(__name__)
 
 
 @app.route('/')
 def my_form():
+    """render front page template
+        Argument: N/A
+        Return: rendered front page 'ReChord_front.html' """
     return render_template('ReChord_front.html')
 
 
 @app.route('/', methods=['POST'])
 def my_form_post():
+    """the view function which return the result page by using the input pass to the back end
+        Arguments: form submitted in ReChord_front.html
+        Return: rendered result page 'ReChord_result.html' """
     if request.form['submit'] == 'Search Snippet':
         snippet = request.form['text']
 
