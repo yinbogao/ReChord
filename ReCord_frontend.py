@@ -1,27 +1,35 @@
-from flask import Flask, render_template, flash, request
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
-from search import prepare_tree, search, find_artic,get_measure
+from search import prepare_tree, search, find_artic, get_measure
 from lxml import etree
-"""Create the Flask app"""
-DEBUG = True
+from flask import Flask, request, render_template, flash
+from io import BytesIO
+
+
 app = Flask(__name__)
 
-"""Turn user submitted MEI code snippet into xml file."""
-def transform_xml(xml_code):
-    xml = xml_code.encode()
-    f = open('upload.xml', 'wb')
-    f.write(xml)
-    f.close()
 
 @app.route('/')
 def my_form():
-    return render_template('search_test_2.html')
+    """render front page template
+        Argument: N/A
+        Return: rendered front page 'ReChord_front.html' """
+    return render_template('ReChord_front.html')
+
 
 @app.route('/', methods=['POST'])
 def my_form_post():
-    text = request.form['text']
-    return transform_xml(text)
+    """the view function which return the result page by using the input pass to the back end
+        Arguments: form submitted in ReChord_front.html
+        Return: rendered result page 'ReChord_result.html' """
+    if request.form['submit'] == 'Search Snippet':
+        snippet = request.form['text']
+
+        xml = BytesIO(snippet.encode())
+        tree, root = prepare_tree('database/Chopin.xml')
+        inputXML = etree.parse(xml)
+        input_root = inputXML.getroot()
+
+        snippet_measure = search(input_root, tree)
+        return render_template('ReChord_result.html', results=snippet_measure)
 
 if __name__ == "__main__":
     app.run()
-
