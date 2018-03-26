@@ -108,7 +108,7 @@ def get_creator(tree):
 
 def find_expressive_term(root, expressive_term):
     """return a list of elements that has expressive term that is of expressive_term
-    Arguments: tree [etree]: tree to be searched
+    Arguments: root [xml Element]: root of the tree to be searched
                expressive_term [string]: expressive term to be found
     Return: all_et_list [List<int>]: list of measure numbers of elements with given expressive term
     """
@@ -117,13 +117,13 @@ def find_expressive_term(root, expressive_term):
     return [get_measure(element) for element in et_test if element.text == expressive_term]
 
 
-def find_artic(tree, artic_name):
+def find_artic(root, artic_name):
     """parse a tree to a list of elements that has articulations that is of artic_name
-    Arguments: tree [etree]: tree to be search
+    Arguments: root [xml Element]: root of the tree to be searched
                artic_name [string]: articulation to be searched
     Return: element_artic_list [List<element>]: list of elements with given articulation
     """
-    music = tree.getroot.find("{http://www.music-encoding.org/ns/mei}music")
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
     return [element for element in all_artic_list if element.attrib['artic'] == artic_name]
 
@@ -183,7 +183,6 @@ def check_element_match(element1, element2):
     Returns: ([boolean]) true if they match all given parameters for tag type, false else
 
     """
-    # todo: implement ability to decide which attributes to check on a search-by-search basis
 
     if element1.tag == element2.tag:
         tag = element1.tag
@@ -191,12 +190,22 @@ def check_element_match(element1, element2):
         if tag == namespace + "note":
             # check pname and dur of note
 
-            if element1.attrib["pname"] == element2.attrib["pname"]:
-                if 'dur' in element1.attrib and 'dur' in element2.attrib:
-                    if element1.attrib["dur"] == element2.attrib["dur"]:
-                        return True
+            if element1.attrib["pname"] != element2.attrib["pname"]:
+                return False
+
+            if 'dur' in element1.attrib and 'dur' in element2.attrib:
+                if element1.attrib["dur"] != element2.attrib["dur"]:
                     return False
-                return True
+
+            if 'oct' in element1.attrib and 'oct' in element2.attrib:
+                if element1.attrib["oct"] != element2.attrib["oct"]:
+                    return False
+
+            if 'stem.dir' in element1.attrib and 'stem.dir' in element2.attrib:
+                if element1.attrib["stem.dir"] != element2.attrib["stem.dir"]:
+                    return False
+
+            return True
 
         elif tag == namespace + "rest":
             # check dur of rest
