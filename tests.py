@@ -59,14 +59,18 @@ def positive_test_check_element_match():
     all_equal = True
     unequalelt = None
     for element in root_to_list(root):
-        if not check_element_match(element, element):
-            all_equal = False
-            unequalelt = element
-    assert all_equal, "check_element_match: Not all elements equal to themselves. Check Element with id "+ unequalelt.attrib["xml:id"]
+        assert check_element_match(element, element), \
+            "check_element_match: element not equal to themselves; check Element with id " + element.attrib["xml:id"]
 
 
 def main():
     positive_test_find_expressive_term()
+    positive_test_find_artic()
+    positive_test_search()
+    positive_test_get_attrib_from_element()
+    positive_test_get_mei_from_database()
+    positive_test_get_title()
+    positive_test_get_creator()
     positive_test_check_element_match()
 
 
