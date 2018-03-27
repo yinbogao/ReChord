@@ -1,8 +1,9 @@
 from flask import Flask, render_template, flash, request
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
-from search import prepare_tree, search, find_artic,get_measure
-from lxml import etree
+
+
 """Create the Flask app"""
+
+
 DEBUG = True
 app = Flask(__name__)
 
@@ -24,4 +25,3 @@ def my_form_post():
 
 if __name__ == "__main__":
     app.run()
-
