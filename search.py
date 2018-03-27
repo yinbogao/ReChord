@@ -1,5 +1,5 @@
-from lxml import etree
 import os
+from lxml import etree
 
 namespace = '{http://www.music-encoding.org/ns/mei}'
 
@@ -135,34 +135,34 @@ def notes_on_beam(tree):
     """
 
     # get a list of all the beam elements
-    r = get_elements(tree, 'beam')
+    beam_list = get_elements(tree, 'beam')
     beam_notes_list = []
 
     # loop through beam list
-    for beam in r:
+    for beam in beam_list:
 
         # get the children of each beam
         children = beam.getchildren()
 
-        # loop through the children of hte beam
+        # loop through the children of the beam
         # todo: there might be artic ignored here
-        ls = []
+        beam_children = []
         for child in children:
 
             # if the child is a note, directly add to the list
             if child.tag == '{http://www.music-encoding.org/ns/mei}note':
-                ls += child.attrib['pname']
+                beam_children += child.attrib['pname']
 
             # else if the child is a rest, add "0" to the list
             elif child.tag == '{http://www.music-encoding.org/ns/mei}rest':
-                ls += '0'
+                beam_children += '0'
 
             # else if the child is a chord, add a list of notes to the list
             elif child.tag == '{http://www.music-encoding.org/ns/mei}chord':
                 notes = child.getchildren()
-                ls.append([note.attrib['pname'] for note in notes if note.tag ==
-                           '{http://www.music-encoding.org/ns/mei}note'])
-        beam_notes_list.append(ls)
+                beam_children.append([note.attrib['pname'] for note in notes if note.tag ==
+                                      '{http://www.music-encoding.org/ns/mei}note'])
+        beam_notes_list.append(beam_children)
 
     return beam_notes_list
 
@@ -251,4 +251,3 @@ def search(input_root, data_tree):
                 # elements don't match->stop input iteration and move to next data element
                 break
     return measure_match_list
-
