@@ -37,14 +37,17 @@ def my_form_post():
         return render_template('ReChord_result.html', results=snippet_measure)
 
     # tab2 terms search
-    if request.form['submit'] == 'Search Terms':
-        tag = request.form['dropdown']
+    if request.form['submit'] == 'Search Parameter':
+        tag = request.form['term']
         para = request.form['parameter']
+        print(para)
+        print(tag)
 
         if tag == 'Expressive Terms':
             result = find_artic(tree, para)
         elif tag == 'Articulation':
             result = find_expressive_term(root, para)
+            print(result)
 
         # # todo
         # elif tag == 'Tempo Marking':

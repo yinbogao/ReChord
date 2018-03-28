@@ -91,6 +91,27 @@
             </div>
             <div id="Term" class="w3-container w3-white w3-padding-16 myLink">
                 <h3>Please select the expressive terms to search</h3>
+                <form method="POST">
+                    <select name="term">
+                        <option value="Expressive Terms">Expressive Terms</option>
+                        <option value="Tempo Marking">Tempo Marking</option>
+                        <option value="Articulation">Articulation</option>
+                        <option value="Dynamic markings">Dynamic markings</option>
+                        <option value="Piano Fingerings">Piano Fingerings</option>
+                        <option value="Pedal Marking">Pedal Marking</option>
+                        <option value="Hairpin">Hairpin</option>
+                        <option value="Slur/Ligatures">Slur/Ligatures</option>
+                        <option value="Ornaments">Ornaments</option>
+                        <option value="Notes">Notes</option>
+                        <option value="Accidental">Accidental</option>
+                    </select>
+                    <br>
+                    <br>
+
+                    <input class="terms" name="parameter" placeholder="Enter your parameter here:" required>
+                    <br>
+                    <input type="submit" name="submit" value="Search Parameter">
+                </form>
             </div>
             <div id="Tempo" class="w3-container w3-white w3-padding-16 myLink">
                 <h3>Please enter the tempo marking</h3>
@@ -132,6 +153,9 @@ function openLink(evt, linkName) {
 }
 // Click on the first tablink on load
 document.getElementsByClassName("tablink")[0].click();
+
+
+
 
 
 
