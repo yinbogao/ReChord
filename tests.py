@@ -23,41 +23,39 @@ def positive_test_search():
     input_xml = etree.parse('testinput.xml')
     input_root = input_xml.getroot()
     measure_match_list = search(input_root, tree)
-    assert measure_match_list.size != 0, "search: unsuccessful"
+    assert len(measure_match_list) != 0, "search: unsuccessful"
 
 
 def positive_test_get_attrib_from_element():
     """Positive test for get_attrib_from_element"""
     tree, _ = prepare_tree('database/Chopin.xml')
     attrib_ls = get_attrib_from_element(tree, 'note', 'pname')
-    assert attrib_ls.size != 0, "positive_test_get_attrib_from_element: no attributes found"
+    assert len(attrib_ls) != 0, "positive_test_get_attrib_from_element: no attributes found"
 
 
 def positive_test_get_mei_from_database():
     """Positive test for get_mei_from_database"""
     all_mei_files = get_mei_from_database('database/MEI_Complete_examples')
-    assert all_mei_files.size != 0, "get_mei_from_database: no files found"
+    assert len(all_mei_files) != 0, "get_mei_from_database: no files found"
 
 
 def positive_test_get_title():
     """Positive test for get_title"""
     tree, _ = prepare_tree('database/Chopin.xml')
     title_list = get_title(tree)
-    assert title_list.size != 0, "get_title: title not found"
+    assert len(title_list) != 0, "get_title: title not found"
 
 
 def positive_test_get_creator():
     """Positive test for get_creator"""
     tree, _ = prepare_tree('database/Chopin.xml')
     creator_list = get_creator(tree)
-    assert creator_list.size != 0, "get_creator: creator (composer) not found"
+    assert len(creator_list) != 0, "get_creator: creator (composer) not found"
 
 
 def positive_test_check_element_match():
     """positive test for seeing if all elements in a file match themselves"""
     _, root = prepare_tree('database/Chopin.xml')
-    all_equal = True
-    unequalelt = None
     for element in root_to_list(root):
         assert check_element_match(element, element), \
             "check_element_match: element not equal to themselves; check Element with id " + element.attrib["xml:id"]
