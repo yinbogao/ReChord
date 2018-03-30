@@ -150,6 +150,17 @@ def find_tempo(root, tempo):
     return [get_measure(element) for element in et_test if element.text == tempo]
 
 
+def find_pedal_marking(root, marking):
+    """parses an element tree for a specified pedal marking
+       Arguments: root [xml Element]: root of tree to be searched
+                  marking [string]: pedal marking to be searched
+       Return: et_test[list<int>]: list of measure numbers where pedal marking appears
+    """
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    et_test = music.iter("{http://www.music-encoding.org/ns/mei}pedal")
+    return [get_measure(element) for element in et_test if element.attrib['dir'] == marking]
+
+
 def notes_on_beam(tree):
     """return a list of nested list where each nested list is the notes on a beam for all beams in tree
     Arguments: tree [etree]: tree to be searched
@@ -199,17 +210,25 @@ def get_mei_from_database(path):
 
 
 def text_box_search(root, tag, search_term):
-    """searches an mei file for """
-    if tag == "dir":
+    """searches an mei file for an element which matches the tag and search term given
+       Arguments: root [Element]: root element of tree to be searched
+                  tag [string]: element type
+                  search_term[string]: search term to find element
+       Return: [list<int>]: List of measures where tag appears"""
+    if tag == "Expressive Terms":
         return find_expressive_term(root, search_term)
-    elif tag == "artic":
+    elif tag == "Articulation":
         return find_artic(root, search_term)
-    elif tag == "dynam":
+    elif tag == "Dynamic Markings":
         return find_dynam(root, search_term)
-    elif tag == "hairpin":
+    elif tag == "Hairpin":
         return []
-    elif tag == "tempo":
+    elif tag == "Tempo Marking":
         return find_tempo(root, search_term)
+    elif tag == "Piano Fingerings":
+        return []
+    elif tag == "Pedal Marking":
+        return []
     else:
         return []
 
