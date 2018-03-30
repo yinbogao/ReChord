@@ -1,10 +1,19 @@
 from search import *
 from lxml import etree
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash, redirect, url_for, send_from_directory
 from io import BytesIO
+from werkzeug.utils import secure_filename
 
+
+UPLOAD_FOLDER = '/uploads/'
+ALLOWED_EXTENSIONS = {'xml'}
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
@@ -21,7 +30,7 @@ def my_form_post():
         Arguments: form submitted in ReChord_front.html
         Return: rendered result page 'ReChord_result.html' """
 
-    # prepare the database
+    # todo: prepare the database
     # get_mei_from_database('database/MEI_Complete_examples')
     tree, root = prepare_tree('database/Chopin.xml')
 
@@ -45,11 +54,12 @@ def my_form_post():
 
         if tag == 'Expressive Terms':
             result = find_artic(tree, para)
+            print(result)
         elif tag == 'Articulation':
             result = find_expressive_term(root, para)
             print(result)
 
-        # # todo
+        # # todo: Integrate more term search
         # elif tag == 'Tempo Marking':
         # elif tag == 'Dynamic Marking':
         # elif tag == 'Piano Fingerings':
@@ -61,6 +71,35 @@ def my_form_post():
         # elif tag == 'Accidental':
 
         return render_template('ReChord_result.html', result=result)
+
+    # upload xml file as searching base
+    if request.form['submit'] == 'Upload File':
+        print("enter upload_file")
+
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['base_file']
+
+        # if user does not select file, browser also submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+
+        # if properly uploaded
+        if file and allowed_file(file.filename):
+            print(file.filename)
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file', filename=filename))
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
 
 if __name__ == "__main__":
     app.run()
