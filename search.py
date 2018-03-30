@@ -40,7 +40,7 @@ def get_measure(element):
     Arguments: element [Element]: element you want to find the measure of
     Return: Measure Number [int]: measure number found in measure's attribute
     """
-    while element.tag != '{http://www.music-encoding.org/ns/mei}measure':
+    while element is not None and element.tag != '{http://www.music-encoding.org/ns/mei}measure':
         element = element.getparent()
     return element.attrib['n']
 
@@ -121,11 +121,33 @@ def find_artic(root, artic_name):
     """parse a tree to a list of elements that has articulations that is of artic_name
     Arguments: root [xml Element]: root of the tree to be searched
                artic_name [string]: articulation to be searched
-    Return: element_artic_list [List<element>]: list of elements with given articulation
+    Return: element_artic_list [List<int>]: list of elements with given articulation
     """
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
-    return [element for element in all_artic_list if element.attrib['artic'] == artic_name]
+    return [get_measure(element) for element in all_artic_list if element.attrib['artic'] == artic_name]
+
+
+def find_dynam(root, dynam_name):
+    """parse a tree to a list of elements that has dynamic marking that is of dynam_name
+       Arguments: root [xml Element]: root of the tree to be searched
+                  dynam_name [string]: dynamic term to be searched
+       Return: et_list [List<int>]: list of elements with given articulation
+       """
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    et_test = music.iter("{http://www.music-encoding.org/ns/mei}dynam")
+    return [get_measure(element) for element in et_test if element.text == dynam_name]
+
+
+def find_tempo(root, tempo):
+    """parses an element tree for a specified tempo marking
+       Arguments: root [xml Element]: root of tree to be searched
+                  tempo [string]: tempo marking to be searched
+       Return: et_test[list<int>]: list of measure numbers where tempo marking appears
+    """
+    music = root.find("{http://www.music-encoding.org/ns/mei}music")
+    et_test = music.iter("{http://www.music-encoding.org/ns/mei}tempo")
+    return [get_measure(element) for element in et_test if element.text == tempo]
 
 
 def notes_on_beam(tree):
@@ -174,6 +196,22 @@ def get_mei_from_database(path):
     """
 
     return [filename for filename in os.listdir(path) if filename.endswith('.mei')]
+
+
+def text_box_search(root, tag, search_term):
+    """searches an mei file for """
+    if tag == "dir":
+        return find_expressive_term(root, search_term)
+    elif tag == "artic":
+        return find_artic(root, search_term)
+    elif tag == "dynam":
+        return find_dynam(root, search_term)
+    elif tag == "hairpin":
+        return []
+    elif tag == "tempo":
+        return find_tempo(root, search_term)
+    else:
+        return []
 
 
 def check_element_match(element1, element2):
@@ -236,7 +274,7 @@ def search(input_root, data_tree):
     data_list = root_to_list(data_tree.getroot())
     measure_match_list = []
 
-    # iterate over data MEI file
+    # iterate over data MEI file ele
     for i in range(len(data_list)-len(input_list)):
 
         # iterate over input and check if each element matches
