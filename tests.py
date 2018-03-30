@@ -14,7 +14,7 @@ def positive_test_find_artic():
     """Positive test for find_artic"""
     _, root = prepare_tree('database/Chopin.xml')
     element_artic_list = find_artic(root, 'stacc')
-    assert element_artic_list.size != 0, "find_artic: stacc not found"
+    assert len(element_artic_list) != 0, "find_artic: stacc not found"
 
 
 def positive_test_search():
