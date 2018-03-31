@@ -5,11 +5,14 @@ from io import BytesIO
 from werkzeug.utils import secure_filename
 
 
-UPLOAD_FOLDER = '/uploads/'
+UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml'}
 
+# initiate the app
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97\n\xd6\x01\x99'
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -77,22 +80,24 @@ def my_form_post():
         print("enter upload_file")
 
         # check if the post request has the file part
-        if 'file' not in request.files:
+        if 'base_file' not in request.files:
             flash('No file part')
             return redirect(request.url)
-        file = request.files['base_file']
+        else:
+            file = request.files['base_file']
 
-        # if user does not select file, browser also submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+            # if user does not select file, browser also submit a empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
 
-        # if properly uploaded
-        if file and allowed_file(file.filename):
-            print(file.filename)
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file', filename=filename))
+            # if properly uploaded
+            elif file and allowed_file(file.filename):
+                print("enter if")
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                # todo handle return
+                return redirect(url_for('uploaded_file', filename=filename))
 
 
 @app.route('/uploads/<filename>')
