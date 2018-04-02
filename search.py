@@ -11,9 +11,11 @@ def prepare_terms_dict():
     Return: [dictionary]: key: term name (regular spelling); value: term abbreviation
     """
 
+    with open('database/terms_dictionary.txt') as file_descriptor:
+        text = file_descriptor.read()
     return {
         line.split('\t')[0]: line.split('\t')[2].strip('()')
-        for line in open('database/terms_dictionary.txt')
+        for line in text.splitlines()
         if len(line) == 5
         }
 
