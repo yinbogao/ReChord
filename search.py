@@ -5,6 +5,20 @@ namespace = '{http://www.music-encoding.org/ns/mei}'
 
 # Generic Functions
 
+def prepare_terms_dict():
+    """
+    return a dictionary of terms for searching through abbreviation
+    Arguments: N/A
+    Return: [dictionary]: key: term name (regular spelling); value: term abbreviation
+    """
+    f = open('database/terms_dictionary.txt')
+    # sheet = [line.rstrip('\t') for line in open('terms_dictionary.txt')]
+    dic = {}
+    for line in  f:
+        line = line.split('\t')
+        if len(line) == 5:
+            dic[line[0]] = line[2].strip('()')
+    return dic
 
 def string_to_root(string_in):
     """
