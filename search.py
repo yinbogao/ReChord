@@ -8,17 +8,15 @@ namespace = '{http://www.music-encoding.org/ns/mei}'
 def prepare_terms_dict():
     """
     return a dictionary of terms for searching through abbreviation
-    Arguments: N/A
     Return: [dictionary]: key: term name (regular spelling); value: term abbreviation
     """
-    f = open('database/terms_dictionary.txt')
-    # sheet = [line.rstrip('\t') for line in open('terms_dictionary.txt')]
-    dic = {}
-    for line in  f:
-        line = line.split('\t')
-        if len(line) == 5:
-            dic[line[0]] = line[2].strip('()')
-    return dic
+
+    return {
+        line.split('\t')[0]: line.split('\t')[2].strip('()')
+        for line in open('database/terms_dictionary.txt')
+        if len(line) == 5
+        }
+
 
 def string_to_root(string_in):
     """
