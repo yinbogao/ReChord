@@ -193,8 +193,9 @@ def notes_on_beam(tree):
             # else if the child is a chord, add a list of notes to the list
             elif child.tag == '{http://www.music-encoding.org/ns/mei}chord':
                 notes = child.getchildren()
-                beam_children.append([note.attrib['pname'] for note in notes if note.tag ==
-                                      '{http://www.music-encoding.org/ns/mei}note'])
+                beam_children.append([
+                    note.attrib['pname'] for note in notes
+                    if note.tag =='{http://www.music-encoding.org/ns/mei}note'])
         beam_notes_list.append(beam_children)
 
     return beam_notes_list
@@ -228,7 +229,7 @@ def text_box_search(root, tag, search_term):
     elif tag == "Piano Fingerings":
         return []
     elif tag == "Pedal Marking":
-        return []
+        return find_pedal_marking(root, search_term)
     else:
         return []
 
@@ -293,7 +294,7 @@ def search(input_root, data_tree):
     data_list = root_to_list(data_tree.getroot())
     measure_match_list = []
 
-    # iterate over data MEI file ele
+    # iterate over data MEI file
     for i in range(len(data_list)-len(input_list)):
 
         # iterate over input and check if each element matches
