@@ -1,29 +1,35 @@
 from flask import Flask, render_template, flash, request
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
-from search import prepare_tree, search, find_artic,get_measure
+from wtforms import Form, TextField, validators
 from lxml import etree
+from search import prepare_tree, search, find_artic, get_measure
 
-"""Turn user submitted MEI code snippet into xml file."""
+
 def transform_xml(xml_code):
+    """Turn user submitted MEI code snippet into xml file."""
     xml = xml_code.encode()
-    f = open('upload.xml', 'wb')
-    f.write(xml)
-    f.close()
+    with open('upload.xml', 'wb') as file_descriptor:
+        file_descriptor.write(xml)
+        file_descriptor.close()
+
 
 """Create the Flask app"""
+
+
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['SECRET_KEY'] = 'r62h49vhjaqfr1280ejgqajfkdtf271sdaqwefasdgfda'
 
 """Construct the submission box and taxonomies"""
+
+
 class SnipUpload(Form):
     name = TextField('Submit your MEI Code Snippets:', validators=[validators.required()])
 
 
-"""Snippet submission"""
 @app.route("/", methods=['GET', 'POST'])
 def code_submit():
+    """Snippet submission"""
     form = SnipUpload(request.form)
 
     if request.method == 'POST':
@@ -36,9 +42,9 @@ def code_submit():
             flash('Your input snippet:')
             flash(name)
 
-            tree, root = prepare_tree('database/Chopin.xml')
-            inputXML = etree.parse('upload.xml')
-            input_root = inputXML.getroot()
+            tree, _ = prepare_tree('database/Chopin.xml')
+            input_xml = etree.parse('upload.xml')
+            input_root = input_xml.getroot()
 
             # print a list of matches to testinput.XML from Chopin.XML
             flash(search(input_root, tree))
