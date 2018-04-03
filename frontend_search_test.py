@@ -26,7 +26,7 @@ app.config['SECRET_KEY'] = 'r62h49vhjaqfr1280ejgqajfkdtf271sdaqwefasdgfda'
 class SnipUpload(Form):
     name = TextField('Submit your MEI Code Snippets:', validators=[validators.required()])
 
-x
+
 @app.route("/", methods=['GET', 'POST'])
 def code_submit():
     """Snippet submission"""
