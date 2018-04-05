@@ -120,9 +120,11 @@
     <div class="w3-display-right-result" style="width:50%">
         <div class="result-data">
             <h2>Congrats!</h2>
-            <h3>Your snippets locate at measure:</h3>
+            <h4>Your snippets locate at:</h4>
+            <h5>{{title}} by {{creator}}</h5>
+            <h4>The measure numbers are:</h4>
             {% for result in results %}
-            <h4>{{result}}</h4>
+            <h5>{{result}}</h5>
             {% endfor %}
 
         </div>

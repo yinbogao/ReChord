@@ -46,7 +46,9 @@ def my_form_post():
         input_root = inputXML.getroot()
 
         snippet_measure = search(input_root, tree)
-        return render_template('ReChord_result.html', results=snippet_measure)
+        title = get_title(tree)
+        creator = get_creator(tree)
+        return render_template('ReChord_result.html', results=snippet_measure, title=title, creator=creator)
 
     # tab2 terms search
     if request.form['submit'] == 'Search Parameter':
