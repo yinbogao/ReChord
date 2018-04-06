@@ -1,7 +1,7 @@
-from lxml import etree
 from flask import Flask, request, render_template, flash, redirect, send_from_directory
 from io import BytesIO
 from werkzeug.utils import secure_filename
+from lxml import etree
 from search import search, prepare_tree, get_title, get_creator, find_artic, find_expressive_term, os
 
 UPLOAD_FOLDER = './uploads/'
@@ -52,6 +52,7 @@ def my_form_post():
         para = request.form['parameter']
         tree, _ = prepare_tree('database/Chopin.xml')
         return search_terms(tag, para, tree)
+    return
 
 
 @App.route('/uploads/<filename>')
