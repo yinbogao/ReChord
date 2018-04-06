@@ -8,30 +8,34 @@ UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml', 'mei'}
 
 # initiate the app
-App = Flask(__name__)
-App.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-App.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97\n\xd6\x01\x99'
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97\n\xd6\x01\x99'
 
 
 def allowed_file(filename):
-    """check the file name to avoid possible hack"""
+    """check the file name to avoid possible hack
+    Arguments: uploaded file's name
+    Return: rendered result page 'ReChord_result.html'
+    """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@App.route('/')
+@app.route('/')
 def my_form():
     """render front page template
-        Argument: N/A
-        Return: rendered front page 'ReChord_front.html' """
+    Return: rendered front page 'ReChord_front.html'
+    """
     return render_template('ReChord_front.html')
 
 
-@App.route('/', methods=['POST'])
+@app.route('/', methods=['POST'])
 def my_form_post():
     """the view function which return the result page by using the input pass to the back end
-        Arguments: form submitted in ReChord_front.html
-        Return: rendered result page 'ReChord_result.html' """
+    Arguments: forms submitted in ReChord_front.html
+    Return: rendered result page 'ReChord_result.html' by call on helper functions
+    """
 
     # todo: Need to iterate multiple user submitted files
 
@@ -55,18 +59,17 @@ def my_form_post():
     return
 
 
-@App.route('/uploads/<filename>')
-def uploaded_file(filename):
-    """upload file and add to upload folder"""
-    return send_from_directory(App.config['UPLOAD_FOLDER'],
-                               filename)
 
-
-# Helper function
+# Helper functions
 
 
 def search_snippet(snippet, tree):
-    """search the snippet from the given database"""
+    """search the snippet from the given database
+    Arguments:
+        snippet of xml that want to search for
+        tree of xml base that needed to be searched in
+    Return: rendered result page 'ReChord_result.html'
+    """
     # todo: prepare the database
     # get_mei_from_database('database/MEI_Complete_examples')
 
@@ -81,7 +84,13 @@ def search_snippet(snippet, tree):
 
 
 def search_terms(tag, para, tree):
-    """ search terms in the database"""
+    """ search terms in the database
+    Arguments:
+        tags of term that want to search for
+        para(meters) of tags that want to search for
+        tree of xml base that needed to be searched in
+    Return: rendered result page 'ReChord_result.html'
+    """
 
     if tag == 'Expressive Terms':
         # todo: do search on expressive terms
@@ -103,7 +112,9 @@ def search_terms(tag, para, tree):
 
 
 def upload_file(name_tag):
-    """pass the upload file and store it in uploads folder"""
+    """pass the upload file and store it in uploads folder
+    Arguments: name_tag that used in html
+    Return: rendered result page 'ReChord_result.html'"""
 
     # check if the post request has the file part
     if 'base_file' not in request.files:
@@ -120,10 +131,10 @@ def upload_file(name_tag):
         # if properly uploaded
         elif file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(App.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # todo handle return
             return filename
 
 
 if __name__ == "__main__":
-    App.run()
+    app.run()
