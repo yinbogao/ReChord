@@ -1,5 +1,5 @@
-from flask import Flask, request, render_template, flash, redirect, send_from_directory
 from io import BytesIO
+from flask import Flask, request, render_template, flash, redirect, send_from_directory
 from werkzeug.utils import secure_filename
 from lxml import etree
 from search import search, prepare_tree, get_title, get_creator, find_artic, find_expressive_term, os
