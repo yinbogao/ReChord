@@ -338,11 +338,10 @@ def text_box_search_folder(path, tag, search_term):
     text_box_array = []
     for file in file_list:
         _, root = prepare_tree(file)
-        list = text_box_search(root, tag, search_term)
+        array = text_box_search(root, tag, search_term)
         string_list = []
-        if len(list) != 0:
-            for number in range(0, len(list)):
-                string_list.append(file + ": " + list[number])
+        for count, element in enumerate(array):
+            string_list.append(file + ": " + element)
             text_box_array.append(string_list)
     return text_box_array
 
@@ -357,10 +356,9 @@ def snippet_search_folder(path, input_root):
     regular_search_array = []
     for file in file_list:
         tree, _ = prepare_tree(file)
-        list = search(input_root, tree)
+        array = search(input_root, tree)
         string_list = []
-        if len(list) != 0:
-            for number in range(0, len(list)):
-                string_list.append(file + ": " + list[number])
+        for count, element in enumerate(array):
+            string_list.append(file + ": " + element)
         regular_search_array.append(string_list)
     return regular_search_array

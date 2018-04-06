@@ -67,9 +67,8 @@ def positive_test_check_element_match():
 
 def positive_test_text_box_search_folder():
     """positive test for ensuring the text box search method appropriately searches through a full folder"""
-    return text_box_search_folder("database/MEI_Complete_examples", "Expressive Terms", "cresc.")
-    # assert len(text_box_search_folder("database/MEI_Complete_examples", "Expressive Terms", "cresc.")) != 0, \
-    #     "cannot find crescendo in folder"
+    assert len(text_box_search_folder("database/MEI_Complete_examples", "Expressive Terms", "cresc.")) != 0, \
+        "cannot find crescendo in folder"
 
 
 def positive_test_text_box_search():
