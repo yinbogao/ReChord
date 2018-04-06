@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <!--load custom CSS-->
 <style>
@@ -33,7 +34,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width:30%
+    width:70%
     }
 
 
@@ -56,9 +57,9 @@
     padding-left: 5%;
     }
 
-
-
-
+    .hidden{
+    display:none;
+    }
 
 
 </style>
@@ -100,52 +101,53 @@
                 <div class="w3-row-padding" style="margin:0 -2px;">
                     <div class="w3-full">
                         <!--todo: here is the frontend form!-->
-                        <form method="POST">
+                        <form method="POST" enctype="multipart/form-data">
                             <input name="text" placeholder="Paste your MEI Snippet Here" required>
                             <br>
-                            <br>
-                            <input type="submit" name="submit" value="Search Snippet">
+                            <h6><a id="button" href="#">Upload and search in your database</a></h6>
+                            <div id="reChord_database">
+                                <input type="submit" name="submit" value="Search Snippet In Our Database">
+                            </div>
+
+                            <div id="user_database" class="hidden">
+                                <br>
+                                <input type="file" name="base_file" multiple>
+                                <input type="submit" name="submit" value="Upload and Search Your Snippet">
+                            </div>
                         </form>
                     </div>
                 </div>
-            </div>
-            <div id="Term" class="w3-container w3-white w3-padding-16 myLink">
-                <h3>Please select the expressive terms to search</h3>
-            </div>
-            <div id="Tempo" class="w3-container w3-white w3-padding-16 myLink">
-                <h3>Please enter the tempo marking</h3>
             </div>
         </div>
     </div>
     <div class="w3-display-right-result" style="width:50%">
         <div class="result-data">
             <h2>Congrats!</h2>
-            <h3>Your snippets locate at measure:</h3>
+            <h4>Your snippets locate at:</h4>
+            <h5>{{title}} by {{creator}}</h5>
+            <h4>The measure numbers are:</h4>
             {% for result in results %}
-            <h4>{{result}}</h4>
+            <h5>{{result}}</h5>
             {% endfor %}
-
         </div>
 
     </div>
-
 </header>
 
-<!-- End page content -->
-</div>
 
 <!-- Footer -->
-<div class="w3-container w3-center w3-opacity w3-margin-bottom">
-    <h5>Find Us On</h5>
-    <div class="w3-xlarge w3-padding-16">
-        <i class="fa fa-facebook-official w3-hover-opacity"></i>
-        <i class="fa fa-instagram w3-hover-opacity"></i>
-        <i class="fa fa-snapchat w3-hover-opacity"></i>
-        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-        <i class="fa fa-twitter w3-hover-opacity"></i>
-        <i class="fa fa-linkedin w3-hover-opacity"></i>
+<footer>
+    <div class="w3-container w3-center w3-opacity w3-margin-bottom">
+        <h5>Find Us On</h5>
+        <div class="w3-xlarge w3-padding-16">
+            <i class="fa fa-facebook-official w3-hover-opacity"></i>
+            <i class="fa fa-instagram w3-hover-opacity"></i>
+            <i class="fa fa-snapchat w3-hover-opacity"></i>
+            <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+            <i class="fa fa-twitter w3-hover-opacity"></i>
+            <i class="fa fa-linkedin w3-hover-opacity"></i>
+        </div>
     </div>
-</div>
 </footer>
 
 <script>
@@ -166,7 +168,12 @@ function openLink(evt, linkName) {
 // Click on the first tablink on load
 document.getElementsByClassName("tablink")[0].click();
 
+//Toggle Options for file upload
 
+$( "#button" ).click(function() {
+    $( "#user_database" ).toggle();
+    $( "#reChord_database" ).toggle().hide();
+});
 
 
 
