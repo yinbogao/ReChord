@@ -1,6 +1,6 @@
+from lxml import etree
 from search import prepare_tree, find_artic, search, get_attrib_from_element, \
     get_mei_from_database, get_title, get_creator, find_expressive_term, check_element_match, root_to_list
-from lxml import etree
 
 
 def positive_test_find_expressive_term():
@@ -20,8 +20,8 @@ def positive_test_find_artic():
 def positive_test_search():
     """Positive test for search"""
     tree, _ = prepare_tree('database/Chopin.xml')
-    inputXML = etree.parse('testinput.xml')
-    input_root = inputXML.getroot()
+    input_xml = etree.parse('testinput.xml')
+    input_root = input_xml.getroot()
     measure_match_list = search(input_root, tree)
     assert len(measure_match_list) != 0, "search: unsuccessful"
 
@@ -56,14 +56,13 @@ def positive_test_get_creator():
 def positive_test_check_element_match():
     """positive test for seeing if all elements in a file match themselves"""
     _, root = prepare_tree('database/Chopin.xml')
-    all_equal = True
-    unequalelt = None
     for element in root_to_list(root):
         assert check_element_match(element, element), \
             "check_element_match: element not equal to themselves; check Element with id " + element.attrib["xml:id"]
 
 
 def main():
+    """implements test methods"""
     positive_test_find_expressive_term()
     positive_test_find_artic()
     positive_test_search()
