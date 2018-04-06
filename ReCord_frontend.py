@@ -14,6 +14,7 @@ app.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97
 
 
 def allowed_file(filename):
+    """check the file name to avoid possible hack"""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -55,6 +56,7 @@ def my_form_post():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
+    """upload file and add to upload folder"""
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
