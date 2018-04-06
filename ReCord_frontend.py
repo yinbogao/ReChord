@@ -1,5 +1,5 @@
 from io import BytesIO
-from flask import Flask, request, render_template, flash, redirect, send_from_directory
+from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
 from lxml import etree
 from search import search, prepare_tree, get_title, get_creator, find_artic, find_expressive_term, os
@@ -8,7 +8,7 @@ UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml', 'mei'}
 
 # initiate the app
-app = Flask(__name__)
+app = Flask(__name__) # pylint: disable=invalid-name
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97\n\xd6\x01\x99'
 
