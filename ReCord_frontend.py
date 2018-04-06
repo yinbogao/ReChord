@@ -1,16 +1,16 @@
-from search import *
 from lxml import etree
-from flask import Flask, request, render_template, flash, redirect, url_for, send_from_directory
+from flask import Flask, request, render_template, flash, redirect, send_from_directory
 from io import BytesIO
 from werkzeug.utils import secure_filename
+from search import search, prepare_tree, get_title, get_creator, find_artic, find_expressive_term, os
 
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml', 'mei'}
 
 # initiate the app
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97\n\xd6\x01\x99'
+App = Flask(__name__)
+App.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+App.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97\n\xd6\x01\x99'
 
 
 def allowed_file(filename):
@@ -19,7 +19,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/')
+@App.route('/')
 def my_form():
     """render front page template
         Argument: N/A
@@ -27,7 +27,7 @@ def my_form():
     return render_template('ReChord_front.html')
 
 
-@app.route('/', methods=['POST'])
+@App.route('/', methods=['POST'])
 def my_form_post():
     """the view function which return the result page by using the input pass to the back end
         Arguments: form submitted in ReChord_front.html
@@ -37,27 +37,27 @@ def my_form_post():
 
     # tab1 snippet search
     if request.form['submit'] == 'Search Snippet In Our Database':
-        tree, root = prepare_tree('database/Chopin.xml')
+        tree, _ = prepare_tree('database/Chopin.xml')
         return search_snippet(request.form['text'], tree)
 
     # tab1 snippet search using user submitted library
-    if request.form['submit'] == 'Upload and Search Your Snippet':
+    elif request.form['submit'] == 'Upload and Search Your Snippet':
         filename = upload_file('base_file')
-        tree, root = prepare_tree(str('uploads/' + filename))
+        tree, _ = prepare_tree(str('uploads/' + filename))
         return search_snippet(request.form['text'], tree)
 
     # tab2 terms search
-    if request.form['submit'] == 'Search Parameter':
+    elif request.form['submit'] == 'Search Parameter':
         tag = request.form['term']
         para = request.form['parameter']
-        tree, root = prepare_tree('database/Chopin.xml')
+        tree, _ = prepare_tree('database/Chopin.xml')
         return search_terms(tag, para, tree)
 
 
-@app.route('/uploads/<filename>')
+@App.route('/uploads/<filename>')
 def uploaded_file(filename):
     """upload file and add to upload folder"""
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
+    return send_from_directory(App.config['UPLOAD_FOLDER'],
                                filename)
 
 
@@ -70,8 +70,8 @@ def search_snippet(snippet, tree):
     # get_mei_from_database('database/MEI_Complete_examples')
 
     xml = BytesIO(snippet.encode())
-    inputXML = etree.parse(xml)
-    input_root = inputXML.getroot()
+    input_xml = etree.parse(xml)
+    input_root = input_xml.getroot()
 
     snippet_measure = search(input_root, tree)
     title = get_title(tree)
@@ -119,10 +119,10 @@ def upload_file(name_tag):
         # if properly uploaded
         elif file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(App.config['UPLOAD_FOLDER'], filename))
             # todo handle return
             return filename
 
 
 if __name__ == "__main__":
-    app.run()
+    App.run()
