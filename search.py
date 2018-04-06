@@ -1,3 +1,6 @@
+"""search.py contains all back-end search algorithms"""
+
+
 import os
 from lxml import etree
 
@@ -7,8 +10,7 @@ namespace = '{http://www.music-encoding.org/ns/mei}'
 
 
 def string_to_root(string_in):
-    """
-    Arguments: string_in [string]: input in XML format in a string
+    """Arguments: string_in [string]: input in XML format in a string
     Return: [element]: root element of parsed etree
     """
 
@@ -123,6 +125,7 @@ def find_artic(root, artic_name):
                artic_name [string]: articulation to be searched
     Return: element_artic_list [List<int>]: list of elements with given articulation
     """
+
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
     return [get_measure(element) for element in all_artic_list if element.attrib['artic'] == artic_name]
@@ -200,15 +203,6 @@ def notes_on_beam(tree):
     return beam_notes_list
 
 
-def get_mei_from_database(path):
-    """gets a list of MEI files from a given folder path
-    Arguments: path [string]: absolute or relative path to folder
-    Returns: all_mei_files: List<file>: list of mei files in path
-    """
-
-    return [filename for filename in os.listdir(path) if filename.endswith('.mei')]
-
-
 def text_box_search(root, tag, search_term):
     """searches an mei file for an element which matches the tag and search term given
        Arguments: root [Element]: root element of tree to be searched
@@ -238,7 +232,6 @@ def check_element_match(element1, element2):
 
     Arguments: element1 and element2 are both lxml Element type
     Returns: ([boolean]) true if they match all given parameters for tag type, false else
-
     """
 
     if element1.tag == element2.tag:
@@ -277,7 +270,8 @@ def check_element_match(element1, element2):
         else:
             # element isn't a note, rest, or articulation--don't need to check attributes
             return True
-    return False
+    else:
+        return False
 
 
 def search(input_root, data_tree):
@@ -308,3 +302,51 @@ def search(input_root, data_tree):
                 # elements don't match->stop input iteration and move to next data element
                 break
     return measure_match_list
+
+
+def get_mei_from_folder(path):
+    """gets a list of MEI files from a given folder path
+    Arguments: path [string]: absolute or relative path to folder
+    Returns: all_mei_files: List<file>: list of mei files in path
+    """
+    return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei')]
+
+
+def text_box_search_folder(path, tag, search_term):
+    """applies the text_box_search() method to a full folder
+    Arguments:  path [string]: absolute of relative path to folder
+                tag [string]: element type
+                search_term[string]: search term to find element
+    Returns:    text_box_array [List<string>]: list of the path of the file that contains the given tag and the measure
+                                                in which it is found
+    """
+    file_list = get_mei_from_folder(path)
+    text_box_array = []
+    for file in file_list:
+        _, root = prepare_tree(file)
+        list = text_box_search(root, tag, search_term)
+        string_list = []
+        if len(list) != 0:
+            for number in range(0, len(list)):
+                string_list.append(file + ": " + list[number])
+            text_box_array.append(string_list)
+    return text_box_array
+
+
+def snippet_search_folder(path, input_root):
+    """applies the search() method to a full folder
+    Arguments:  path [string]: absolute of relative path to folder
+                input_root is a root of elements to be searched for
+    Returns:    regular_search_array[List<sring>]: list of the path and measure number in which the snippet is found
+    """
+    file_list = get_mei_from_folder(path)
+    regular_search_array = []
+    for file in file_list:
+        tree, _ = prepare_tree(file)
+        list = search(input_root, tree)
+        string_list = []
+        if len(list) != 0:
+            for number in range(0, len(list)):
+                string_list.append(file + ": " + list[number])
+        regular_search_array.append(string_list)
+    return regular_search_array
