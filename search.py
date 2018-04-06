@@ -178,13 +178,43 @@ def find_pedal_marking(root, marking):
     return [get_measure(element) for element in et_test if element.attrib['dir'] == marking]
 
 
-def get_mei_from_database(path):
-    """gets a list of MEI files from a given folder path
-    Arguments: path [string]: absolute or relative path to folder
-    Returns: all_mei_files: List<file>: list of mei files in path
+def notes_on_beam(tree):
+    """return a list of nested list where each nested list is the notes on a beam for all beams in tree
+    Arguments: tree [etree]: tree to be searched
+    Return: beam_notes_list: [List<Element tag='beam'>] nested list of beam elements
     """
 
-    return [filename for filename in os.listdir(path) if filename.endswith('.mei')]
+    # get a list of all the beam elements
+    beam_list = get_elements(tree, 'beam')
+    beam_notes_list = []
+
+    # loop through beam list
+    for beam in beam_list:
+
+        # get the children of each beam
+        children = beam.getchildren()
+
+        # loop through the children of the beam
+        # todo: there might be artic ignored here
+        beam_children = []
+        for child in children:
+
+            # if the child is a note, directly add to the list
+            if child.tag == '{http://www.music-encoding.org/ns/mei}note':
+                beam_children += child.attrib['pname']
+
+            # else if the child is a rest, add "0" to the list
+            elif child.tag == '{http://www.music-encoding.org/ns/mei}rest':
+                beam_children += '0'
+
+            # else if the child is a chord, add a list of notes to the list
+            elif child.tag == '{http://www.music-encoding.org/ns/mei}chord':
+                notes = child.getchildren()
+                beam_children.append([note.attrib['pname'] for note in notes if note.tag ==
+                                      '{http://www.music-encoding.org/ns/mei}note'])
+        beam_notes_list.append(beam_children)
+
+    return beam_notes_list
 
 
 def text_box_search(root, tag, search_term):
