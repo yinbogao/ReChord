@@ -4,7 +4,6 @@ from flask import Flask, request, render_template, flash, redirect, url_for, sen
 from io import BytesIO
 from werkzeug.utils import secure_filename
 
-
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml'}
 
@@ -33,14 +32,14 @@ def my_form_post():
         Arguments: form submitted in ReChord_front.html
         Return: rendered result page 'ReChord_result.html' """
 
-    # todo: prepare the database
-    # get_mei_from_database('database/MEI_Complete_examples')
-    tree, root = prepare_tree('database/Chopin.xml')
-
     # tab1 snippet search
-    if request.form['submit'] == 'Search Snippet':
-        snippet = request.form['text']
+    if request.form['submit'] == 'Search Snippet In Our Database':
+        # todo: prepare the database
+        # get_mei_from_database('database/MEI_Complete_examples')
+        tree, root = prepare_tree('database/Chopin.xml')
+        print(tree)
 
+        snippet = request.form['text']
         xml = BytesIO(snippet.encode())
         inputXML = etree.parse(xml)
         input_root = inputXML.getroot()
@@ -50,7 +49,30 @@ def my_form_post():
         creator = get_creator(tree)
         return render_template('ReChord_result.html', results=snippet_measure, title=title, creator=creator)
 
-    # tab2 terms search
+    # tab1 snippet search using user submitted library
+    if request.form['submit'] == 'Upload and Search Your Snippet':
+        filename = upload_file('base_file')
+        #todo: Lijia, what is this?
+        # redirect(url_for('uploaded_file', filename=filename))
+
+        # todo: prepare the user submitted database and tree
+        # get_mei_from_database('database/MEI_Complete_examples')
+        # todo: Need to iterate multiple user submitted files
+        tree_name = str('uploads/'+ filename)
+        tree, root = prepare_tree(tree_name)
+
+        snippet = request.form['text']
+        xml = BytesIO(snippet.encode())
+        inputXML = etree.parse(xml)
+        input_root = inputXML.getroot()
+
+        snippet_measure = search(input_root, tree)
+        title = get_title(tree)
+        creator = get_creator(tree)
+        return render_template('ReChord_result.html', results=snippet_measure, title=title, creator=creator)
+
+
+# tab2 terms search
     if request.form['submit'] == 'Search Parameter':
         tag = request.form['term']
         para = request.form['parameter']
@@ -58,6 +80,7 @@ def my_form_post():
         print(tag)
 
         if tag == 'Expressive Terms':
+            # todo: do search on expressive terms
             result = find_artic(tree, para)
             print(result)
         elif tag == 'Articulation':
@@ -77,16 +100,12 @@ def my_form_post():
 
         return render_template('ReChord_result.html', result=result)
 
-    # upload xml file as searching base
-    if request.form['submit'] == 'Upload File':
-        filename = upload_file('base_file')
-        return redirect(url_for('uploaded_file', filename=filename))
-
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
+
 
 def upload_file(name_tag):
     # check if the post request has the file part
@@ -107,6 +126,7 @@ def upload_file(name_tag):
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # todo handle return
             return filename
+
 
 if __name__ == "__main__":
     app.run()
