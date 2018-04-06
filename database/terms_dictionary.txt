@@ -1,0 +1,192 @@
+a	 	 	at; to; by; for; in	eg: a tempo = in time (back to the previous speed).
+a capella	a capella	 	unaccompanied	usually in choral music
+a piacere	a capella	 	at pleasure	The performer is not bound to follow the given rhythm exactly.
+accelerando	accelerando	(accel.)	gradually getting faster	An increase in the speed of the music.
+accento	 	 	accented; emphasised	 
+ad libitum	ad libitum	(ad lib.)	at choice; freely	1) A passage may be performed freely.
+2) An instrument in a score may be omitted.
+adagietto	adagietto	 	rather slow	Usually a little faster than adagio
+adagio	adagio	 	slowly	Often indicates a speed somewhere between andante and largo
+affabile	 	 	friendly	 
+affettuoso	affettuoso	 	tenderly	 
+affrettando	affrettando	 	hurrying	 
+agitato	agitato	 	agitated; restless	 
+al; alla	 	 	in the manner of	eg: alla marcia = in the style of a march
+alla breve	alla breve	 	with a minim beat	 
+allargando	allargando	 	broadening	 
+allegretto	allegretto	 	fairly quick	Faster than Andante and usually slower than Allegro
+allegro	allegro	 	fast	 
+alt	 	 	high	"in alt" is used in volcal music to refer to notes in the octave above the treble stave.
+amabile	amabile	 	amiable; pleasant	 
+amore	 	 	love	 
+andante	andante	 	walking speed	Moderately slow
+andantino	andantino	 	like walking speed	This can mean either slightly slower or slightly faster than andante. It is ambiguous.
+anima	anima	 	soul; spirit	eg: con anima = with spirit
+animando	animando	 	becoming more lively	 
+animato	animato	 	animated; lively	 
+appassionato	appassionato	 	with passion	 
+arco	 	 	with the bow	An instruction to string players to use the bow.
+arioso	 	 	like an aria	Play in the style of an aria (singing)
+assai	assai	 	very	eg: allegro assai = very fast
+attacca	attacca	 	go straight on	Indicates an immediate move to the next section of music.
+ben	 	 	well	 
+bis	 	 	twice	Indicates the repetition of a short passage.
+bravura	bravura	 	skill; brilliance	 
+brio	brio	 	vigour	eg: con brio = with vigour
+calando	calando	 	getting softer; dying away	Usually includes slowing down
+cantabile	cantabile	 	in a singing style	 
+cantando	cantando	 	singing	 
+capriccioso	capriccioso	 	in a whimsical or fanciful style	 
+col; colla; colle	 	 	with	eg: colla voce = with the voice
+come	come	 	as; similar to	eg: come prima = as before
+comodo	comodo	 	convenient	eg: tempo comodo = at a comfortable speed
+con	con	 	with	eg: con moto = with movement
+crescendo	crescendo	(cresc.)	gradually getting louder	 
+da capo	dacapo	(D.C.)	from the beginning	An instruction to repeat the misc from the beginning.
+dal segno	dalsegno	(D.S.)	from the sign	An instruction to repeat the misc from the sign.
+deciso	deciso	 	with determination	 
+decrescendo	decrescendo	(decresc.)	gradually getting softer	 
+delicato	delicato	 	delicate	 
+diminuendo	diminuendo	(dim.)	gradually getting softer	 
+dolce	dolce	 	sweetly	eg: dolcissimo = as sweet as possible
+dolente	dolente	 	sad; mournful	 
+dolore	dolore	 	grief	eg: doloroso = sorrowful
+doloroso	doloroso	 	sorrowful	 
+doppio movimento	doppio-movimento	 	twice as fast	 
+e; ed	 	 	and	 
+energico	energico	 	energetic	 
+espressivo	espressivo	(espr.)	expressive	 
+estinto	estinto	 	as soft as possible	 
+facile	facile	 	easy	 
+felice	felice	 	happy	 
+fermata	 	 	pause	 
+feroce	feroce	 	fierce	 
+fine	fine	 	the end	Often used in conjunction with "da capo" or "dal segno" to indicate where to end the piece after repeating.
+eg: al fine = to the end
+flessibile	flessibile	 	flexible	 
+forte	forte	(f)	loud; strong	 
+fortepiano	fortepiano	(fp)	loud then immediately soft	 
+fortissimo	fortissimo	(ff)	very loud	 
+forza	forza	 	force	eg: forzando (fz) = strongly accented
+fretta	fretta	 	haste	 
+fuoco	fuoco	 	fire	 
+furioso	furioso	 	furious	 
+giocoso	giocoso	 	playful; humerous	 
+giojoso	 	 	joyful; merry	 
+giusto	giusto	 	proper; exact	 
+grandioso	grandioso	 	grandly	 
+grave	grave	 	very slow; solemn	 
+grazioso	grazioso	 	graceful	 
+impetuoso	impetuoso	 	impetuous	 
+incalzando	incalzando	 	getting quicker	 
+inquieto	inquieto	 	restless	 
+in relievo	in-relievo	 	prominent	A direction to make the melody stand out.
+lacrimoso	lacrimoso	 	sad	 
+largamente	largamente	 	broadly	 
+larghetto	larghetto	 	rather slow	Slightly faster than largo.
+largo	largo	 	rather slow; stately	 
+legato	legato	 	smoothly	Indicates no break between notes.
+leggiero	leggiero	 	light; nimble	 
+lento	lento	 	slow	 
+liberamente	liberamente	 	freely	 
+l'istesso	listesso	 	the same	eg: l'istesso tempo = at the same speed
+loco	loco	 	at the normal pitch	Used to cancel an 8va direction. Also used to confirm that 8va is not intended.
+lugubre	lugubre	 	mournful	 
+lunga	lunga	 	long	eg: lunga pausa = long pause
+lusigando	lusigando	 	coaxing	 
+ma	ma	 	but	eg: allegro ma non troppo = quick but not too quick
+maestoso	maestoso	 	majestic	 
+mancando	mancando	 	fading away	 
+marcato	marcato	(marc.)	emphatic; accented	 
+marziale	marziale	 	in a military style	 
+meno	meno	 	less	eg: meno forte = less loud
+mesto	mesto	 	sad	 
+mezzoforte	mezzoforte	(mf)	moderately loud	 
+mezzopiano	mezzopiano	(mp)	moderately soft	 
+misterioso	misterioso	 	mysterious	 
+misura	misura	 	measure	eg: alla misura = in strict time; senza misura = in free time
+moderato	moderato	 	moderate speed	eg: allegro moderato = moderately fast.
+molto	molto	 	very; much	eg: allegro molto = very fast
+morendo	morendo	 	dying away	 
+mosso	mosso	 	movement	 
+moto	moto	 	movement	 
+niente	niente	 	nothing	 
+nobilmente	nobilmente	 	nobly	 
+non	 	 	not	 
+nuovo	nuovo	 	new	e.g. di nuovo = again
+obbligato	obbligato	 	obligatory	Indicates that an instrument has a special role and is essential.
+ossia	ossia	 	or; alternatively	Often used to indicate a simpler version of a difficult passage.
+ostinato	ostinato	 	persistent	Generally refers to a persistently repeated rhythmic or melodic figure.
+parlando	parlando	 	speaking	A direction for a singer to sing in a conversational style.
+patetico	patetico	 	with deep feeling	 
+pausa	pausa	 	pause	 
+per	 	 	by; for; to	 
+perdendosi	perdendosi	 	dying away	 
+pesante	pesante	 	heavy	 
+piacevole	piacevole	 	pleasant	 
+piangevole	piangevole	 	plaintive	 
+pianissimo	pianissimo	(pp)	very soft	 
+piano	piano	(p)	soft	 
+più	piu	 	more	e.g. più forte = louder
+pizzicato	 	 	plucked	An instruction to string players to pluck the strings, rather than bow them.
+placido	placido	 	calm; peaceful	 
+pochettino	pochettino	(poch.)	rather little	 
+poco	poco	 	a little	e.g. poco a poco = little by little
+possible	possible	 	possible	e.g. presto possible = as fast as possible
+precipitando	precipitando	 	rushing; headlong	 
+presto	presto	 	very fast	 
+prima	prima	 	first	(Prima; Primo) e.g. prima volta = first time; tempo primo = revert to the speed at the beginning of the piece of music
+quasi	quasi	 	as if; resembling	e.g. quasi recitativo = like a recitative
+rallentando	rallentando	(rall.)	gradually getting slower	 
+rigoroso	rigoroso	 	strict	 
+rinforzando	rinforzando	(rf; rfz)	reinforcing	 
+risoluto	risoluto	 	bold; strong	 
+ritardando	ritardando	(rit.)	gradually getting slower	 
+ritenuto	ritenuto	(rit.)	held back	 
+ritmico	ritmico	 	rhythmically	 
+rubato	rubato	 	with some freedom of time	 
+scherzando	scherzando	 	playful; joking	Also scherzoso.
+scherzo	 	 	joke; jest	A movement in a piece, generally light and humerous in nature.
+seconda	seconda	 	second	(Seconda; secondo)
+semplice	semplice	 	simple; plain	 
+sempre	sempre	 	always	e.g. sempre staccato = always detached
+senza	senza	 	without	e.g. senza misura = freely (not in time)
+segue	segue	 	go straight on	 
+sforzando	sforzando	(sf; sfz)	forced; accented	 
+simile	simile	(sim.)	in the same way	 
+slargando	slargando	 	getting slower	 
+slancio	slancio	 	enthusiasm	 
+smorzando	smorzando	(smorz.)	dying away	Both tone and speed
+soave	 	 	gentle; smooth	 
+solenne	solenne	 	solemn; grave	 
+sonoro	 	 	resonant; with rich tone	 
+sopra	sopra	 	above	 
+sospirando	sospirando	 	sighing	 
+sostenuto	sostenuto	 	sustained	 
+sotto	sotto	 	below	eg: sotto voce = in an undertone
+spirito	 	 	spirited	 
+spiritoso	spiritoso	 	spirited	 
+staccato	staccato	 	detached	 
+strepitoso	strepitoso	 	noisy; boisterous	 
+stretto	stretto	 	quickening the speed	Also means overlapping entries of a fugue subject.
+stringendo	stringendo	 	gradually getting faster	 
+subito	subito	 	suddenly	 
+tacet	tacet	 	silent	A direction that a particular part has nothing to play in a section of music.
+tanto	tanto	 	so much	 
+tempo	tempo	 	speed	eg: a tempo = return to the previous speed, after a slowing down or speeding up.
+teneramente	teneramente	 	tenderly	 
+tenuto	tenuto	 	held	 
+tosto	tosto	 	swift; rapid	 
+tranquillo	tranquillo	 	calm	 
+trionfale	trionfale	 	triumphant	 
+triste	triste	 	sad; sorrowful	 
+troppo	troppo	 	too much	eg: allegro ma non troppo = fast, but not too fast.
+tutti	tutti	 	all; everyone	 
+veloce	veloce	 	swift	 
+vigoroso	vigoroso	 	vigorous; strong	 
+vivace	vivace	 	lively	 
+vivo	vivo	 	lively	 
+voce	voce	 	voice	 
+volante	volante	 	flying; fast	 
+volta	volta	 	time	e.g. prima volta = first time
+volti subito	volti-subito	(V.S.)	turn the page at once	 

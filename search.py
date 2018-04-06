@@ -8,6 +8,20 @@ namespace = '{http://www.music-encoding.org/ns/mei}'
 
 # Generic Functions
 
+def prepare_terms_dict():
+    """
+    return a dictionary of terms for searching through abbreviation
+    Return: [dictionary]: key: term name (regular spelling); value: term abbreviation
+    """
+
+    with open('database/terms_dictionary.txt') as file_descriptor:
+        text = file_descriptor.read()
+    return {
+        line.split('\t')[0]: line.split('\t')[2].strip('()')
+        for line in text.splitlines()
+        if len(line) == 5
+        }
+
 
 def string_to_root(string_in):
     """Arguments: string_in [string]: input in XML format in a string
@@ -222,7 +236,7 @@ def text_box_search(root, tag, search_term):
     elif tag == "Piano Fingerings":
         return []
     elif tag == "Pedal Marking":
-        return []
+        return find_pedal_marking(root, search_term)
     else:
         return []
 
@@ -287,7 +301,7 @@ def search(input_root, data_tree):
     data_list = root_to_list(data_tree.getroot())
     measure_match_list = []
 
-    # iterate over data MEI file ele
+    # iterate over data MEI file
     for i in range(len(data_list)-len(input_list)):
 
         # iterate over input and check if each element matches

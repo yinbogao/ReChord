@@ -3,14 +3,13 @@ from wtforms import Form, TextField, validators
 from lxml import etree
 from search import prepare_tree, search, find_artic, get_measure
 
-"""Turn user submitted MEI code snippet into xml file."""
-
 
 def transform_xml(xml_code):
+    """Turn user submitted MEI code snippet into xml file."""
     xml = xml_code.encode()
-    file = open('upload.xml', 'wb')
-    file.write(xml)
-    file.close()
+    with open('upload.xml', 'wb') as file_descriptor:
+        file_descriptor.write(xml)
+        file_descriptor.close()
 
 
 """Create the Flask app"""
@@ -28,11 +27,9 @@ class SnipUpload(Form):
     name = TextField('Submit your MEI Code Snippets:', validators=[validators.required()])
 
 
-"""Snippet submission"""
-
-
 @app.route("/", methods=['GET', 'POST'])
 def code_submit():
+    """Snippet submission"""
     form = SnipUpload(request.form)
 
     if request.method == 'POST':
