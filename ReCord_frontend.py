@@ -5,7 +5,7 @@ from io import BytesIO
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = './uploads/'
-ALLOWED_EXTENSIONS = {'xml'}
+ALLOWED_EXTENSIONS = {'xml', 'mei'}
 
 # initiate the app
 app = Flask(__name__)
