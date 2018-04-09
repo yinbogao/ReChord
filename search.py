@@ -340,9 +340,9 @@ def text_box_search_folder(path, tag, search_term):
     text_box_array = []
     for file in file_list:
         _, root = prepare_tree(file)
-        array = text_box_search(root, tag, search_term)
+        tb_search_output_array = text_box_search(root, tag, search_term)
         string_list = []
-        for element in array:
+        for element in tb_search_output_array:
             string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
                                ' '.join(str(e) for e in get_creator(file)) + ": " + element)
             text_box_array.append(string_list)
@@ -361,9 +361,9 @@ def snippet_search_folder(path, tree):
     regular_search_array = []
     for file in file_list:
         tree, _ = prepare_tree(file)
-        array = search(input_root, tree)
+        search_output_array = search(input_root, tree)
         string_list = []
-        for element in array:
+        for element in search_output_array:
             string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
                                ' '.join(str(e) for e in get_creator(file)) + ": " + element)
         regular_search_array.append(string_list)
