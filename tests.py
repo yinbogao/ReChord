@@ -1,13 +1,17 @@
+"""tests.py contains a test for every back-end algorithm"""
+
+
 from lxml import etree
 from search import prepare_tree, find_artic, search, get_attrib_from_element, \
-    get_mei_from_database, get_title, get_creator, find_expressive_term, check_element_match, root_to_list
+    get_mei_from_folder, get_title, get_creator, find_expressive_term, check_element_match, root_to_list, \
+    text_box_search_folder, text_box_search, snippet_search_folder
 
 
 def positive_test_find_expressive_term():
     """Positive test for find_expressive_term"""
     _, root = prepare_tree('database/Chopin.xml')
     element_et_list = find_expressive_term(root, 'legatissimo')
-    assert len(element_et_list) != 0, "find_expressive_term: legatissimo not found."
+    assert len(element_et_list), "find_expressive_term: legatissimo not found."
 
 
 def positive_test_find_artic():
@@ -33,23 +37,21 @@ def positive_test_get_attrib_from_element():
     assert len(attrib_ls) != 0, "positive_test_get_attrib_from_element: no attributes found"
 
 
-def positive_test_get_mei_from_database():
+def positive_test_get_mei_from_folder():
     """Positive test for get_mei_from_database"""
-    all_mei_files = get_mei_from_database('database/MEI_Complete_examples')
+    all_mei_files = get_mei_from_folder('database/MEI_Complete_examples')
     assert len(all_mei_files) != 0, "get_mei_from_database: no files found"
 
 
 def positive_test_get_title():
     """Positive test for get_title"""
-    tree, _ = prepare_tree('database/Chopin.xml')
-    title_list = get_title(tree)
+    title_list = get_title('database/Chopin.xml')
     assert len(title_list) != 0, "get_title: title not found"
 
 
 def positive_test_get_creator():
     """Positive test for get_creator"""
-    tree, _ = prepare_tree('database/Chopin.xml')
-    creator_list = get_creator(tree)
+    creator_list = get_creator('database/Chopin.xml')
     assert len(creator_list) != 0, "get_creator: creator (composer) not found"
 
 
@@ -61,16 +63,39 @@ def positive_test_check_element_match():
             "check_element_match: element not equal to themselves; check Element with id " + element.attrib["xml:id"]
 
 
+def positive_test_text_box_search_folder():
+    """positive test for ensuring the text box search method appropriately searches through a full folder"""
+    assert len(text_box_search_folder("database/MEI_Complete_examples", "Expressive Terms", "cresc.")) != 0, \
+        "cannot find crescendo in folder"
+
+
+def positive_test_text_box_search():
+    """positive test to make sure text box search method completes a search through a given mei file"""
+    _, root = prepare_tree('database/Chopin.xml')
+    assert len(text_box_search(root, "Expressive Terms", "legatissimo")) != 0, "cannot find legatissimo expressive term"
+
+
+def positive_test_snippet_search_folder():
+    """positive test to see if the search method will traverse a folder and output matches between the
+        snippet and the files in the folder"""
+    input_xml = etree.parse('Aguado_Walzer_G-major_SNIPPET_TEST.xml')
+    assert len(snippet_search_folder("database/MEI_Complete_examples", input_xml)) != 0, \
+        "no matches found between input file and folder"
+
+
 def main():
     """implements test methods"""
     positive_test_find_expressive_term()
     positive_test_find_artic()
     positive_test_search()
     positive_test_get_attrib_from_element()
-    positive_test_get_mei_from_database()
+    positive_test_get_mei_from_folder()
     positive_test_get_title()
     positive_test_get_creator()
     positive_test_check_element_match()
+    positive_test_text_box_search_folder()
+    positive_test_text_box_search()
+    positive_test_snippet_search_folder()
 
 
 if __name__ == '__main__':
