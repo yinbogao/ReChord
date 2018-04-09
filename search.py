@@ -8,6 +8,7 @@ namespace = '{http://www.music-encoding.org/ns/mei}'
 
 # Generic Functions
 
+
 def prepare_terms_dict():
     """
     return a dictionary of terms for searching through abbreviation
@@ -108,7 +109,7 @@ def get_title(tree):
     title_stmt = get_elements(tree, 'titleStmt')
     first = title_stmt[0]
     arr = first.getchildren()
-    title_list = [element for element in arr if element.tag == "{http://www.music-encoding.org/ns/mei}title"]
+    title_list = [element.text for element in arr if element.tag == "{http://www.music-encoding.org/ns/mei}title"]
     return title_list
 
 
@@ -118,7 +119,7 @@ def get_creator(tree):
     Return: creators_list [List<element>]: List of elements marking the creator(s) of a piece
     """
     children = get_elements(tree, 'respStmt')[0].getchildren()
-    creators_list = [element for element in children if element.attrib['role'] == "creator"]
+    creators_list = [element.text for element in children if element.attrib['role'] == "creator"]
     return creators_list
 
 
