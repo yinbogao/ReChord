@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <!--load custom CSS-->
 <style>
@@ -38,6 +39,10 @@
 
     .w3-display-middle {
     top: 40%;
+    }
+
+    .hidden{
+    display:none;
     }
 
 
@@ -80,26 +85,52 @@
                 <div class="w3-row-padding" style="margin:0 -2px;">
                     <div class="w3-full">
                         <!--todo: here is the frontend form!-->
-                        <form method="POST">
+                        <form method="POST" enctype="multipart/form-data">
                             <input name="text" placeholder="Paste your MEI Snippet Here" required>
                             <br>
-                            <br>
-                            <input type="submit" name="submit" value="Search Snippet">
+                            <h6><a id="button" href="#">Upload and search in your database</a></h6>
+                            <div id="reChord_database">
+                                <input type="submit" name="submit" value="Search Snippet In Our Database">
+                            </div>
+
+
+                            <div id="user_database" class="hidden">
+                                <br>
+                                <input type="file" name="base_file" multiple>
+                                <input type="submit" name="submit" value="Upload and Search Your Snippet">
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <div id="Term" class="w3-container w3-white w3-padding-16 myLink">
-                <h3>Please select the expressive terms to search</h3>
-            </div>
-            <div id="Tempo" class="w3-container w3-white w3-padding-16 myLink">
-                <h3>Please enter the tempo marking</h3>
-            </div>
+        <div id="Term" class="w3-container w3-white w3-padding-16 myLink">
+            <h3>Please select the expressive terms to search</h3>
+            <form method="POST">
+                <select name="term">
+                    <option value="Expressive Terms">Expressive Terms</option>
+                    <option value="Tempo Marking">Tempo Marking</option>
+                    <option value="Articulation">Articulation</option>
+                    <option value="Dynamic Markings">Dynamic Markings</option>
+                    <option value="Piano Fingerings">Piano Fingerings</option>
+                    <option value="Pedal Marking">Pedal Marking</option>
+                    <option value="Hairpin">Hairpin</option>
+                </select>
+                <br>
+                <br>
+
+                <input class="terms" name="parameter" placeholder="Enter your parameter here:" required>
+                <br>
+                <input type="submit" name="submit" value="Search Parameter">
+            </form>
+        </div>
+        <div id="Tempo" class="w3-container w3-white w3-padding-16 myLink">
+            <h3>Please enter the tempo marking</h3>
         </div>
     </div>
 </header>
 
 <!-- End page content -->
+</div>
 </div>
 
 <!-- Footer -->
@@ -133,6 +164,18 @@ function openLink(evt, linkName) {
 // Click on the first tablink on load
 document.getElementsByClassName("tablink")[0].click();
 
+//Toggle Options for file upload
+
+$( "#button" ).click(function() {
+    $( "#user_database" ).toggle();
+    $( "#reChord_database" ).toggle().hide();
+});
+
+
+
+
+
+
 
 
 
@@ -141,5 +184,4 @@ document.getElementsByClassName("tablink")[0].click();
 
 </script>
 
-</body>
 </html>
