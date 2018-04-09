@@ -45,15 +45,13 @@ def positive_test_get_mei_from_folder():
 
 def positive_test_get_title():
     """Positive test for get_title"""
-    tree, _ = prepare_tree('database/Chopin.xml')
-    title_list = get_title(tree)
+    title_list = get_title('database/Chopin.xml')
     assert len(title_list) != 0, "get_title: title not found"
 
 
 def positive_test_get_creator():
     """Positive test for get_creator"""
-    tree, _ = prepare_tree('database/Chopin.xml')
-    creator_list = get_creator(tree)
+    creator_list = get_creator('database/Chopin.xml')
     assert len(creator_list) != 0, "get_creator: creator (composer) not found"
 
 
@@ -78,11 +76,10 @@ def positive_test_text_box_search():
 
 
 def positive_test_snippet_search_folder():
-    """positive test to see if the search algorithm will traverse a folder and output matches between the
+    """positive test to see if the search method will traverse a folder and output matches between the
         snippet and the files in the folder"""
     input_xml = etree.parse('Aguado_Walzer_G-major_SNIPPET_TEST.xml')
-    input_root = input_xml.getroot()
-    assert len(snippet_search_folder("database/MEI_Complete_examples", input_root)) != 0, \
+    assert len(snippet_search_folder("database/MEI_Complete_examples", input_xml)) != 0, \
         "no matches found between input file and folder"
 
 
