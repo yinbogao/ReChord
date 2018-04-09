@@ -101,11 +101,12 @@ def get_attrib_from_element(tree, tag, att_name):
 # Specific Functions
 
 
-def get_title(tree):
+def get_title(path):
     """"return a list of each line of the title of the piece
     Arguments: tree [etree]: tree of file to search
     Return: title_list [List<element>]: list of title elements
     """
+    tree, _ = prepare_tree(path)
     title_stmt = get_elements(tree, 'titleStmt')
     first = title_stmt[0]
     arr = first.getchildren()
@@ -113,11 +114,12 @@ def get_title(tree):
     return title_list
 
 
-def get_creator(tree):
+def get_creator(path):
     """return a list of all composers (creators) in the piece
     Arguments: tree [etree]: tree of mei file
     Return: creators_list [List<element>]: List of elements marking the creator(s) of a piece
     """
+    tree, _ = prepare_tree(path)
     children = get_elements(tree, 'respStmt')[0].getchildren()
     creators_list = [element.text for element in children if element.attrib['role'] == "creator"]
     return creators_list
@@ -339,27 +341,31 @@ def text_box_search_folder(path, tag, search_term):
     text_box_array = []
     for file in file_list:
         _, root = prepare_tree(file)
-        array = text_box_search(root, tag, search_term)
+        tb_search_output_array = text_box_search(root, tag, search_term)
         string_list = []
-        for count, element in enumerate(array):
-            string_list.append(file + ": " + element)
+        for element in tb_search_output_array:
+            string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
+                               ' '.join(str(e) for e in get_creator(file)) + ": " + element)
             text_box_array.append(string_list)
     return text_box_array
 
 
-def snippet_search_folder(path, input_root):
+def snippet_search_folder(path, tree):
     """applies the search() method to a full folder
     Arguments:  path [string]: absolute of relative path to folder
-                input_root is a root of elements to be searched for
-    Returns:    regular_search_array[List<sring>]: list of the path and measure number in which the snippet is found
+                tree is an etree to be searched
+    Returns:    regular_search_array[List<string>]: title, creator (composer) and
+                    measure number in which the snippet is found
     """
+    input_root = tree.getroot()
     file_list = get_mei_from_folder(path)
     regular_search_array = []
     for file in file_list:
         tree, _ = prepare_tree(file)
-        array = search(input_root, tree)
+        search_output_array = search(input_root, tree)
         string_list = []
-        for count, element in enumerate(array):
-            string_list.append(file + ": " + element)
+        for element in search_output_array:
+            string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
+                               ' '.join(str(e) for e in get_creator(file)) + ": " + element)
         regular_search_array.append(string_list)
     return regular_search_array
