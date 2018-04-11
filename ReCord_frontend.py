@@ -2,7 +2,7 @@ from io import BytesIO
 from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
 from lxml import etree
-from search import search, prepare_tree, get_title, get_creator,text_box_search, os
+from search import search, prepare_tree, get_title, get_creator,text_box_search_folder, snippet_search_folder, os
 
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml', 'mei'}
@@ -41,49 +41,43 @@ def my_form_post():
 
     # tab1 snippet search
     if request.form['submit'] == 'Search Snippet In Our Database':
-        tree, _ = prepare_tree('database/Chopin.xml')
-        return search_snippet(request.form['text'], tree)
+        path = 'database/'
+        return search_snippet(path, request.form['text'])
 
     # tab1 snippet search using user submitted library
     elif request.form['submit'] == 'Upload and Search Your Snippet':
-        filename = upload_file('base_file')
-        tree, _ = prepare_tree(str('uploads/' + filename))
-        return search_snippet(request.form['text'], tree)
+        path = str('uploads/')
+        return search_snippet(path, request.form['text'])
 
     # tab2 terms search
     elif request.form['submit'] == 'Search Parameter':
         tag = request.form['term']
         para = request.form['parameter']
-        tree, _ = prepare_tree('database/Chopin.xml')
-        return search_terms(tag, para, tree)
+        path = 'database/'
+        return search_terms(path, tag, para)
     return
 
 
-
 # Helper functions
-
-
-def search_snippet(snippet, tree):
+def search_snippet(path, snippet):
     """search the snippet from the given database
     Arguments:
         snippet of xml that want to search for
         tree of xml base that needed to be searched in
     Return: rendered result page 'ReChord_result.html'
     """
-    # todo: prepare the database
-    # get_mei_from_database('database/MEI_Complete_examples')
 
     xml = BytesIO(snippet.encode())
-    input_xml = etree.parse(xml)
-    input_root = input_xml.getroot()
+    input_xml_tree = etree.parse(xml)
 
-    snippet_measure = search(input_root, tree)
+    # fixme: the new backend search file return title and creator name
+    snippet_measure = snippet_search_folder(path, input_xml_tree)
     title = get_title(tree)
     creator = get_creator(tree)
     return render_template('ReChord_result.html', results=snippet_measure, title=title, creator=creator)
 
 
-def search_terms(tag, para, tree):
+def search_terms(path, tag, para):
     """ search terms in the database
     Arguments:
         tags of term that want to search for
@@ -92,7 +86,7 @@ def search_terms(tag, para, tree):
     Return: rendered result page 'ReChord_result.html'
     """
 
-    return render_template('ReChord_result.html', result=text_box_search(tree.root, tag, para))
+    return render_template('ReChord_result.html', result=text_box_search_folder(path, tag, para))
 
 
 def upload_file(name_tag):
