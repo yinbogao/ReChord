@@ -1,3 +1,6 @@
+"""search.py contains all back-end search algorithms"""
+
+
 import os
 from lxml import etree
 
@@ -22,8 +25,7 @@ def prepare_terms_dict():
 
 
 def string_to_root(string_in):
-    """
-    Arguments: string_in [string]: input in XML format in a string
+    """Arguments: string_in [string]: input in XML format in a string
     Return: [element]: root element of parsed etree
     """
 
@@ -99,11 +101,12 @@ def get_attrib_from_element(tree, tag, att_name):
 # Specific Functions
 
 
-def get_title(tree):
+def get_title(path):
     """"return a list of each line of the title of the piece
     Arguments: tree [etree]: tree of file to search
     Return: title_list [List<element>]: list of title elements
     """
+    tree, _ = prepare_tree(path)
     title_stmt = get_elements(tree, 'titleStmt')
     first = title_stmt[0]
     arr = first.getchildren()
@@ -111,11 +114,12 @@ def get_title(tree):
     return title_list
 
 
-def get_creator(tree):
+def get_creator(path):
     """return a list of all composers (creators) in the piece
     Arguments: tree [etree]: tree of mei file
     Return: creators_list [List<element>]: List of elements marking the creator(s) of a piece
     """
+    tree, _ = prepare_tree(path)
     children = get_elements(tree, 'respStmt')[0].getchildren()
     creators_list = [element.text for element in children if element.attrib['role'] == "creator"]
     return creators_list
@@ -138,6 +142,7 @@ def find_artic(root, artic_name):
                artic_name [string]: articulation to be searched
     Return: element_artic_list [List<int>]: list of elements with given articulation
     """
+
     music = root.find("{http://www.music-encoding.org/ns/mei}music")
     all_artic_list = music.iter("{http://www.music-encoding.org/ns/mei}artic")
     return [get_measure(element) for element in all_artic_list if element.attrib['artic'] == artic_name]
@@ -176,13 +181,43 @@ def find_pedal_marking(root, marking):
     return [get_measure(element) for element in et_test if element.attrib['dir'] == marking]
 
 
-def get_mei_from_database(path):
-    """gets a list of MEI files from a given folder path
-    Arguments: path [string]: absolute or relative path to folder
-    Returns: all_mei_files: List<file>: list of mei files in path
+def notes_on_beam(tree):
+    """return a list of nested list where each nested list is the notes on a beam for all beams in tree
+    Arguments: tree [etree]: tree to be searched
+    Return: beam_notes_list: [List<Element tag='beam'>] nested list of beam elements
     """
 
-    return [filename for filename in os.listdir(path) if filename.endswith('.mei')]
+    # get a list of all the beam elements
+    beam_list = get_elements(tree, 'beam')
+    beam_notes_list = []
+
+    # loop through beam list
+    for beam in beam_list:
+
+        # get the children of each beam
+        children = beam.getchildren()
+
+        # loop through the children of the beam
+        # todo: there might be artic ignored here
+        beam_children = []
+        for child in children:
+
+            # if the child is a note, directly add to the list
+            if child.tag == '{http://www.music-encoding.org/ns/mei}note':
+                beam_children += child.attrib['pname']
+
+            # else if the child is a rest, add "0" to the list
+            elif child.tag == '{http://www.music-encoding.org/ns/mei}rest':
+                beam_children += '0'
+
+            # else if the child is a chord, add a list of notes to the list
+            elif child.tag == '{http://www.music-encoding.org/ns/mei}chord':
+                notes = child.getchildren()
+                beam_children.append([note.attrib['pname'] for note in notes if note.tag ==
+                                      '{http://www.music-encoding.org/ns/mei}note'])
+        beam_notes_list.append(beam_children)
+
+    return beam_notes_list
 
 
 def text_box_search(root, tag, search_term):
@@ -214,7 +249,6 @@ def check_element_match(element1, element2):
 
     Arguments: element1 and element2 are both lxml Element type
     Returns: ([boolean]) true if they match all given parameters for tag type, false else
-
     """
 
     if element1.tag == element2.tag:
@@ -253,7 +287,8 @@ def check_element_match(element1, element2):
         else:
             # element isn't a note, rest, or articulation--don't need to check attributes
             return True
-    return False
+    else:
+        return False
 
 
 def search(input_root, data_tree):
@@ -284,3 +319,53 @@ def search(input_root, data_tree):
                 # elements don't match->stop input iteration and move to next data element
                 break
     return measure_match_list
+
+
+def get_mei_from_folder(path):
+    """gets a list of MEI files from a given folder path
+    Arguments: path [string]: absolute or relative path to folder
+    Returns: all_mei_files: List<file>: list of mei files in path
+    """
+    return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei')]
+
+
+def text_box_search_folder(path, tag, search_term):
+    """applies the text_box_search() method to a full folder
+    Arguments:  path [string]: absolute of relative path to folder
+                tag [string]: element type
+                search_term[string]: search term to find element
+    Returns:    text_box_array [List<string>]: list of the path of the file that contains the given tag and the measure
+                                                in which it is found
+    """
+    file_list = get_mei_from_folder(path)
+    text_box_array = []
+    for file in file_list:
+        _, root = prepare_tree(file)
+        tb_search_output_array = text_box_search(root, tag, search_term)
+        string_list = []
+        for element in tb_search_output_array:
+            string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
+                               ' '.join(str(e) for e in get_creator(file)) + ": " + element)
+            text_box_array.append(string_list)
+    return text_box_array
+
+
+def snippet_search_folder(path, tree):
+    """applies the search() method to a full folder
+    Arguments:  path [string]: absolute of relative path to folder
+                tree is an etree to be searched
+    Returns:    regular_search_array[List<string>]: title, creator (composer) and
+                    measure number in which the snippet is found
+    """
+    input_root = tree.getroot()
+    file_list = get_mei_from_folder(path)
+    regular_search_array = []
+    for file in file_list:
+        tree, _ = prepare_tree(file)
+        search_output_array = search(input_root, tree)
+        string_list = []
+        for element in search_output_array:
+            string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
+                               ' '.join(str(e) for e in get_creator(file)) + ": " + element)
+        regular_search_array.append(string_list)
+    return regular_search_array
