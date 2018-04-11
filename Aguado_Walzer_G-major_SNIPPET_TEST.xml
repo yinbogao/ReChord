@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-model href="http://music-encoding.googlecode.com/svn/tags/MEI2013_v2.1.1/schemata/mei-all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://music-encoding.googlecode.com/svn/tags/MEI2013_v2.1.1/schemata/mei-all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns="http://www.music-encoding.org/ns/mei"
+     meiversion="2013">
+                           <beam>
+                              <chord xml:id="d30373e1" dur="16" stem.dir="up">
+                                 <note xml:id="d30278e928" pname="d" oct="5"/>
+                                 <note xml:id="d30278e946" pname="f" oct="5" accid.ges="s"/>
+                              </chord>
+                              <chord xml:id="d30377e1" dur="16" stem.dir="up">
+                                 <note xml:id="d30278e967"
+                                       pname="c"
+                                       accid="s"
+                                       oct="5"
+                                       accid.ges="s"/>
+                                 <note xml:id="d30278e989"
+                                       pname="e"
+                                       accid="s"
+                                       oct="5"
+                                       accid.ges="s"/>
+                              </chord>
+                              <chord xml:id="d30381e1" dur="8" stem.dir="up">
+                                 <note xml:id="d30278e1012" pname="d" oct="5"/>
+                                 <note xml:id="d30278e1030" pname="f" oct="5" accid.ges="s"/>
+                              </chord>
+                           </beam>
+</mei>
