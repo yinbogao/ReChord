@@ -2,7 +2,7 @@ from io import BytesIO
 from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
 from lxml import etree
-from search import search, prepare_tree, get_title, get_creator, find_artic, find_expressive_term, os
+from search import search, prepare_tree, get_title, get_creator,text_box_search, os
 
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml', 'mei'}
@@ -92,23 +92,7 @@ def search_terms(tag, para, tree):
     Return: rendered result page 'ReChord_result.html'
     """
 
-    if tag == 'Expressive Terms':
-        # todo: do search on expressive terms
-        result = find_artic(tree, para)
-    elif tag == 'Articulation':
-        result = find_expressive_term(tree.root, para)
-
-    # todo: Integrate more term search
-    # elif tag == 'Tempo Marking':
-    # elif tag == 'Dynamic Marking':
-    # elif tag == 'Piano Fingerings':
-    # elif tag == 'Pedal Marking':
-    # elif tag == 'Hairpin':
-    # elif tag == 'Slur/Ligatures':
-    # elif tag == 'Ornaments':
-    # elif tag == 'Notes':
-    # elif tag == 'Accidental':
-    return render_template('ReChord_result.html', result=result)
+    return render_template('ReChord_result.html', result=text_box_search(tree.root, tag, para))
 
 
 def upload_file(name_tag):
