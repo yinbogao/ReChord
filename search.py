@@ -326,7 +326,7 @@ def get_mei_from_folder(path):
     Arguments: path [string]: absolute or relative path to folder
     Returns: all_mei_files: List<file>: list of mei files in path
     """
-    return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei')]
+    return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei') or filename.endswith('.xml')]
 
 
 def text_box_search_folder(path, tag, search_term):
@@ -359,6 +359,7 @@ def snippet_search_folder(path, tree):
     """
     input_root = tree.getroot()
     file_list = get_mei_from_folder(path)
+    print(file_list)
     regular_search_array = []
     for file in file_list:
         tree, _ = prepare_tree(file)

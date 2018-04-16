@@ -41,24 +41,33 @@ def my_form_post():
 
     # tab1 snippet search
     if request.form['submit'] == 'Search Snippet In Our Database':
-        path = 'database/'
+        path = 'database/mei_data'
         return search_snippet(path, request.form['text'])
+
 
     # tab1 snippet search using user submitted library
     elif request.form['submit'] == 'Upload and Search Your Snippet':
-        path = str('uploads/')
+        path = 'uploads'
         return search_snippet(path, request.form['text'])
 
     # tab2 terms search
     elif request.form['submit'] == 'Search Parameter':
         tag = request.form['term']
         para = request.form['parameter']
-        path = 'database/'
+        path = 'database'
         return search_terms(path, tag, para)
     return
 
 
 # Helper functions
+
+def get_mei_from_folder(path):
+    """gets a list of MEI files from a given folder path
+    Arguments: path [string]: absolute or relative path to folder
+    Returns: all_mei_files: List<file>: list of mei files in path
+    """
+    return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei')]
+
 def search_snippet(path, snippet):
     """search the snippet from the given database
     Arguments:
@@ -70,11 +79,12 @@ def search_snippet(path, snippet):
     xml = BytesIO(snippet.encode())
     input_xml_tree = etree.parse(xml)
 
+
     # fixme: the new backend search file return title and creator name
-    snippet_measure = snippet_search_folder(path, input_xml_tree)
-    title = get_title(tree)
-    creator = get_creator(tree)
-    return render_template('ReChord_result.html', results=snippet_measure, title=title, creator=creator)
+    origins = snippet_search_folder(path, input_xml_tree)
+    # title = get_title(tree)
+    # creator = get_creator(tree)
+    return render_template('ReChord_result.html', origins=origins)
 
 
 def search_terms(path, tag, para):
