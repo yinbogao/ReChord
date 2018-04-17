@@ -359,7 +359,6 @@ def snippet_search_folder(path, tree):
     """
     input_root = tree.getroot()
     file_list = get_mei_from_folder(path)
-    print(file_list)
     regular_search_array = []
     for file in file_list:
         tree, _ = prepare_tree(file)
