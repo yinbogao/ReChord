@@ -52,7 +52,7 @@ def my_form_post():
     elif request.form['submit'] == 'Search Parameter':
         tag = request.form['term']
         para = request.form['parameter']
-        path = 'database'
+        path = 'database/test_files'
         return search_terms(path, tag, para)
     return
 
@@ -98,8 +98,18 @@ def search_terms(path, tag, para):
         tree of xml base that needed to be searched in
     Return: rendered result page 'ReChord_result.html'
     """
+    print("enter search term")
+    origins = text_box_search_folder(path, tag, para)
+    result_list = []
+    for key, value in origins.items():
+        temp = key + value
+        result_list.append(temp)
 
-    return render_template('ReChord_result.html', result=text_box_search_folder(path, tag, para))
+        # times of appearing
+        num_appearance = len(value.split(","))
+        print(num_appearance)
+
+    return render_template('ReChord_result.html', result=result_list)
 
 
 def upload_file(name_tag):

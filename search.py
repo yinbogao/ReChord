@@ -334,21 +334,27 @@ def text_box_search_folder(path, tag, search_term):
     Arguments:  path [string]: absolute of relative path to folder
                 tag [string]: element type
                 search_term[string]: search term to find element
-    Returns:    text_box_array [List<string>]: list of the path of the file that contains the given tag and the measure
-                                                in which it is found
+    Returns:    text_box_array [List<string>]: list of the path of the file that
+    Returns: [dictionary]:
+        key: title + creator (composer) ;
+        value: measure numbers where the given tag are found
+
     """
+    print("enter back end")
     file_list = get_mei_from_folder(path)
-    print(file_list)
-    text_box_array = []
+    result_dict = {}
     for file in file_list:
         _, root = prepare_tree(file)
         tb_search_output_array = text_box_search(root, tag, search_term)
-        string_list = []
+        print(tb_search_output_array)
         for element in tb_search_output_array:
-            string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
-                               ' '.join(str(e) for e in get_creator(file)) + ": " + element)
-            text_box_array.append(string_list)
-    return text_box_array
+            key = str(' '.join(str(e) for e in get_title(file)) + " by " +
+                        ' '.join(str(e) for e in get_creator(file)) + ": ")
+            if key in result_dict:
+                result_dict[key] = str(result_dict[key] + "," + element)
+            else:
+                result_dict[key] = element
+    return result_dict
 
 
 def snippet_search_folder(path, tree):
@@ -362,17 +368,17 @@ def snippet_search_folder(path, tree):
     """
     input_root = tree.getroot()
     file_list = get_mei_from_folder(path)
-    result_list = {}
+    result_dict = {}
 
     for file in file_list:
         tree, _ = prepare_tree(file)
         search_output_array = search(input_root, tree)
         for element in search_output_array:
             key = str(' '.join(str(e) for e in get_title(file)) + " by " +
-                               ' '.join(str(e) for e in get_creator(file)) + ": ")
-            if key in result_list:
-                result_list[key] = str (result_list[key] + "," + (element))
+                        ' '.join(str(e) for e in get_creator(file)) + ": ")
+            if key in result_dict:
+                result_dict[key] = str(result_dict[key] + "," + element)
             else:
-                result_list[key] = element
+                result_dict[key] = element
 
-    return result_list
+    return result_dict
