@@ -79,11 +79,7 @@ def search_snippet(path, snippet):
     xml = BytesIO(snippet.encode())
     input_xml_tree = etree.parse(xml)
 
-
-    # fixme: the new backend search file return title and creator name
     origins = snippet_search_folder(path, input_xml_tree)
-    # title = get_title(tree)
-    # creator = get_creator(tree)
     return render_template('ReChord_result.html', origins=origins)
 
 

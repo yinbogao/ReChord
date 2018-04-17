@@ -359,8 +359,6 @@ def snippet_search_folder(path, tree):
     """
     input_root = tree.getroot()
     file_list = get_mei_from_folder(path)
-    print(file_list)
-    regular_search_array = []
     for file in file_list:
         tree, _ = prepare_tree(file)
         search_output_array = search(input_root, tree)
@@ -368,5 +366,4 @@ def snippet_search_folder(path, tree):
         for element in search_output_array:
             string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
                                ' '.join(str(e) for e in get_creator(file)) + ": " + element)
-        regular_search_array.append(string_list)
-    return regular_search_array
+    return string_list

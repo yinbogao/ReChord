@@ -61,6 +61,18 @@
     display:none;
     }
 
+    <!--Resulte page alternative row color-->
+    .alternative_cls{
+    width:100%;
+    height:60px
+    }
+    .alternative_cls:nth-child(1){
+    background:#ccc;
+    }
+    .alternative_cls:nth-child(odd){
+    background:#ccc;
+    }
+
 
 </style>
 
@@ -124,12 +136,13 @@
     <div class="w3-display-right-result" style="width:50%">
         <div class="result-data">
             <h2>Congrats!</h2>
-            <h4>Your snippets locate at:</h4>
-            <h5>{{title}} by {{creator}}</h5>
-            <h4>The measure numbers are:</h4>
+            <h3>Your snippets locate at:</h3>
             {% for origin in origins %}
-            <h5>{{origin}}</h5>
+            <div class="alternative_cls">
+                <h5>{{origin}}</h5>
+            </div>
             {% endfor %}
+
         </div>
 
     </div>
@@ -175,6 +188,9 @@ $( "#button" ).click(function() {
     $( "#user_database" ).toggle();
     $( "#reChord_database" ).toggle().hide();
 });
+
+
+
 
 
 
