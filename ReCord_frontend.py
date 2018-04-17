@@ -5,12 +5,10 @@ from werkzeug.utils import secure_filename
 from lxml import etree
 from search import search, prepare_tree, get_title, get_creator,text_box_search_folder, snippet_search_folder, os
 
-UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'xml', 'mei'}
 
 # initiate the app
 app = Flask(__name__) # pylint: disable=invalid-name
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = '\x82\xebT\x17\x07\xbbx\xd9\xe1dxR\x11\x8b\x0ci\xe1\xb7\xa8\x97\n\xd6\x01\x99'
 
 
@@ -42,7 +40,7 @@ def my_form_post():
 
     # tab1 snippet search
     if request.form['submit'] == 'Search Snippet In Our Database':
-        path = 'database/mei_data'
+        path = 'database/test_files'
         return search_snippet(path, request.form['text'])
 
     # tab1 snippet search using user submitted library
@@ -80,7 +78,16 @@ def search_snippet(path, snippet):
     input_xml_tree = etree.parse(xml)
 
     origins = snippet_search_folder(path, input_xml_tree)
-    return render_template('ReChord_result.html', origins=origins)
+    result_list = []
+    for key, value in origins.items():
+        temp = key + value
+        result_list.append(temp)
+
+        # times of appearing
+        num_appearance = len(value.split(","))
+        print(num_appearance)
+
+    return render_template('ReChord_result.html', origins=result_list)
 
 
 def search_terms(path, tag, para):

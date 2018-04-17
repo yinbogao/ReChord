@@ -338,6 +338,7 @@ def text_box_search_folder(path, tag, search_term):
                                                 in which it is found
     """
     file_list = get_mei_from_folder(path)
+    print(file_list)
     text_box_array = []
     for file in file_list:
         _, root = prepare_tree(file)
@@ -359,11 +360,17 @@ def snippet_search_folder(path, tree):
     """
     input_root = tree.getroot()
     file_list = get_mei_from_folder(path)
+    result_list = {}
+
     for file in file_list:
         tree, _ = prepare_tree(file)
         search_output_array = search(input_root, tree)
-        string_list = []
         for element in search_output_array:
-            string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
-                               ' '.join(str(e) for e in get_creator(file)) + ": " + element)
-    return string_list
+            key = str(' '.join(str(e) for e in get_title(file)) + " by " +
+                               ' '.join(str(e) for e in get_creator(file)) + ": ")
+            if key in result_list:
+                result_list[key] = str (result_list[key] + "," + (element))
+            else:
+                result_list[key] = element
+
+    return result_list
