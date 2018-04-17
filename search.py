@@ -338,7 +338,6 @@ def text_box_search_folder(path, tag, search_term):
                                                 in which it is found
     """
     file_list = get_mei_from_folder(path)
-    print(file_list)
     text_box_array = []
     for file in file_list:
         _, root = prepare_tree(file)

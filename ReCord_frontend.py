@@ -1,9 +1,13 @@
+"""ReChord_frontend.py construct a flask app and calls on search.py for searching"""
+# pylint: disable=invalid-name
+
 import uuid
+import os
 from io import BytesIO
 from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
 from lxml import etree
-from search import search, prepare_tree, get_title, get_creator,text_box_search_folder, snippet_search_folder, os
+from search import text_box_search_folder, snippet_search_folder
 
 ALLOWED_EXTENSIONS = {'xml', 'mei'}
 
@@ -75,7 +79,7 @@ def search_snippet(path, snippet):
     Return: rendered result page 'ReChord_result.html'
     """
     xml = BytesIO(snippet.encode())
-    input_xml_tree = etree.parse(xml)
+    input_xml_tree = etree.parse(xml)  # pylint: disable=c-extension-no-member
 
     origins = snippet_search_folder(path, input_xml_tree)
     result_list = []
