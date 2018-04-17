@@ -355,8 +355,10 @@ def snippet_search_folder(path, tree):
     """applies the search() method to a full folder
     Arguments:  path [string]: absolute of relative path to folder
                 tree is an etree to be searched
-    Returns:    regular_search_array[List<string>]: title, creator (composer) and
-                    measure number in which the snippet is found
+    Returns: [dictionary]:
+        key: title + creator (composer) ;
+        value: measure numbers in which the snippet is found
+
     """
     input_root = tree.getroot()
     file_list = get_mei_from_folder(path)
