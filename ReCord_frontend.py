@@ -1,3 +1,4 @@
+import uuid
 from io import BytesIO
 from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
@@ -44,10 +45,9 @@ def my_form_post():
         path = 'database/mei_data'
         return search_snippet(path, request.form['text'])
 
-
     # tab1 snippet search using user submitted library
     elif request.form['submit'] == 'Upload and Search Your Snippet':
-        path = 'uploads'
+        path = upload_file("base_file")
         return search_snippet(path, request.form['text'])
 
     # tab2 terms search
@@ -68,6 +68,7 @@ def get_mei_from_folder(path):
     """
     return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei')]
 
+
 def search_snippet(path, snippet):
     """search the snippet from the given database
     Arguments:
@@ -75,7 +76,6 @@ def search_snippet(path, snippet):
         tree of xml base that needed to be searched in
     Return: rendered result page 'ReChord_result.html'
     """
-
     xml = BytesIO(snippet.encode())
     input_xml_tree = etree.parse(xml)
 
@@ -96,29 +96,40 @@ def search_terms(path, tag, para):
 
 
 def upload_file(name_tag):
-    """pass the upload file and store it in uploads folder
+    """pass the upload files and store them in uploads folder's unique sub-folder
     Arguments: name_tag that used in html
-    Return: rendered result page 'ReChord_result.html'"""
+    Return: upload path name
+    """
 
     # check if the post request has the file part
     if 'base_file' not in request.files:
         flash('No file part')
         return redirect(request.url)
     else:
-        file = request.files[name_tag]
+        files = request.files.getlist(name_tag)
+        file_path = make_upload_dir()
 
-        # if user does not select file, browser also submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+        for file in files:
+            # if user does not select file, browser also submit a empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
 
-        # if properly uploaded
-        elif file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # todo handle return
-            return filename
+            # if properly uploaded
+            elif file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(file_path, filename))
+        return file_path
 
+
+def make_upload_dir():
+    """return a unique file_path for each upload
+    RETURN: unique file path under uploads folder"""
+
+    file_path = r"database/uploads/" + str(uuid.uuid4()) + "/"
+    directory = os.path.dirname(file_path)
+    os.makedirs(directory)
+    return file_path
 
 if __name__ == "__main__":
     app.run()
