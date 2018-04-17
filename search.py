@@ -346,9 +346,10 @@ def text_box_search_folder(path, tag, search_term):
         string_list = []
         for element in tb_search_output_array:
             string_list.append(' '.join(str(e) for e in get_title(file)) + " by " +
-                               ' '.join(str(e) for e in get_creator(file)) + ": " + element)
+                               ' '.join(str(e) for e in get_creator(file)) + element)
             text_box_array.append(string_list)
     return text_box_array
+
 
 
 def snippet_search_folder(path, tree):
@@ -367,7 +368,7 @@ def snippet_search_folder(path, tree):
         search_output_array = search(input_root, tree)
         for element in search_output_array:
             key = str(' '.join(str(e) for e in get_title(file)) + " by " +
-                               ' '.join(str(e) for e in get_creator(file)) + ": ")
+                               ' '.join(str(e) for e in get_creator(file)) + '\n' + " Measure Number: ")
             if key in result_list:
                 result_list[key] = str (result_list[key] + "," + (element))
             else:

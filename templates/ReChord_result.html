@@ -12,8 +12,13 @@
 
 <!--load custom CSS-->
 <style>
-    body,h1,h2,h3,h4,h5,h6
+    body,h1,h2,h3,h5,h6
     {font-family: "Raleway", Arial, Helvetica, sans-serif}
+
+    h4
+    {font-family: "Raleway", Arial, Helvetica, sans-serif
+    font-weight:300}
+
 
     .myLink
     {display: none}
@@ -139,6 +144,7 @@
             <h3>Your snippets locate at:</h3>
             {% for origin in origins %}
             <div class="alternative_cls">
+                <h4>Number of Appearances: {{appearances}}</h4>
                 <h5>{{origin}}</h5>
             </div>
             {% endfor %}

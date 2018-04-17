@@ -64,7 +64,7 @@ def get_mei_from_folder(path):
     Arguments: path [string]: absolute or relative path to folder
     Returns: all_mei_files: List<file>: list of mei files in path
     """
-    return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei')]
+    return [path + "/" + filename for filename in os.listdir(path) if filename.endswith('.mei') or filename.endswith('.xml')]
 
 
 def search_snippet(path, snippet):
@@ -85,9 +85,8 @@ def search_snippet(path, snippet):
 
         # times of appearing
         num_appearance = len(value.split(","))
-        print(num_appearance)
 
-    return render_template('ReChord_result.html', origins=result_list)
+    return render_template('ReChord_result.html', origins=result_list, appearances=num_appearance)
 
 
 def search_terms(path, tag, para):
